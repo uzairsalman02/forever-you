@@ -8,9 +8,19 @@ import { VaultMemory } from "@/content/vaultMemories";
 interface PolaroidCardProps {
   memory: VaultMemory;
   index: number;
+  isTransitioning?: boolean;
 }
 
-export function PolaroidCard({ memory, index }: PolaroidCardProps) {
+export function PolaroidCard({
+  memory,
+  index,
+  isTransitioning = false,
+}: PolaroidCardProps) {
+  // Compute deterministic fly-away direction angles for cinematic transition
+  const flyX = (index % 2 === 0 ? -1 : 1) * (180 + (index % 4) * 90);
+  const flyY = (index % 3 === 0 ? -1 : 1) * (200 + (index % 5) * 70);
+  const flyRotate = (index % 2 === 0 ? -30 : 30) + (index % 3) * 5;
+
   const cardVariants: Variants = {
     hidden: {
       opacity: 0,
@@ -29,20 +39,37 @@ export function PolaroidCard({ memory, index }: PolaroidCardProps) {
         ease: [0.22, 1, 0.36, 1],
       },
     },
+    flyingAway: {
+      x: flyX,
+      y: flyY,
+      rotate: flyRotate,
+      opacity: 0,
+      scale: 0.7,
+      transition: {
+        duration: 1.6,
+        delay: (index % 4) * 0.06,
+        ease: [0.4, 0, 0.2, 1],
+      },
+    },
   };
 
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{
-        y: -12,
-        scale: 1.04,
-        rotate: memory.hoverRotation,
-        zIndex: 60,
-        transition: { duration: 0.35, ease: "easeOut" },
-      }}
+      animate={isTransitioning ? "flyingAway" : undefined}
+      whileHover={
+        !isTransitioning
+          ? {
+              y: -12,
+              scale: 1.04,
+              rotate: memory.hoverRotation,
+              zIndex: 60,
+              transition: { duration: 0.35, ease: "easeOut" },
+            }
+          : undefined
+      }
       style={{ zIndex: memory.zIndex }}
-      className={`relative group bg-white p-3 sm:p-4 pb-6 sm:pb-7 rounded-md sm:rounded-lg shadow-[0_10px_35px_rgba(0,0,0,0.10)] border border-rose-100/50 transition-shadow duration-300 hover:shadow-[0_25px_50px_rgba(244,114,182,0.22)] cursor-pointer select-none ${memory.widthClass} ${memory.marginOffset}`}
+      className={`relative group bg-white p-3 sm:p-4 pb-6 sm:pb-7 rounded-md sm:rounded-lg shadow-[0_10px_35px_rgba(0,0,0,0.10)] border border-rose-100/50 transition-shadow duration-300 hover:shadow-[0_25px_50px_rgba(244,114,182,0.22)] select-none ${memory.widthClass} ${memory.marginOffset}`}
     >
       {/* Image Container with organic aspect ratio */}
       <div

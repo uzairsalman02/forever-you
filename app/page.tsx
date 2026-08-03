@@ -1,16 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { RELEASE_CONFIG } from "@/content/release";
 import { useCountdown } from "@/hooks/useCountdown";
 import { CountdownScene } from "@/components/countdown/CountdownScene";
 import { HeroScene } from "@/components/hero/HeroScene";
 import { MemoryVaultScene } from "@/components/memory-vault/MemoryVaultScene";
+import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 
 export default function HomePage() {
   const { days, hours, minutes, seconds, isUnlocked, isHydrated } = useCountdown(
     RELEASE_CONFIG.releaseDate,
     RELEASE_CONFIG.developmentMode
   );
+  const [showMemoryReveal, setShowMemoryReveal] = useState(false);
 
   // Prevent flash before client hydration
   if (!isHydrated) {
@@ -31,13 +34,25 @@ export default function HomePage() {
     );
   }
 
-  // Unlocked experience: Scene 2 (Hero) -> Scene 3 (Memory Vault)
+  const handleVaultTransitionComplete = () => {
+    setShowMemoryReveal(true);
+    setTimeout(() => {
+      const revealSection = document.getElementById("memories-section");
+      if (revealSection) {
+        revealSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
+
+  // Unlocked experience flow: Scene 2 (Hero) -> Scene 3 (Memory Vault) -> Scene 4 (Memory Reveal)
   return (
     <div className="w-full bg-background min-h-screen">
       <HeroScene />
-      <MemoryVaultScene />
-      {/* Scroll target anchor prepared for future section */}
-      <div id="memories-section" />
+      <MemoryVaultScene
+        onTransitionComplete={handleVaultTransitionComplete}
+      />
+      {showMemoryReveal && <MemoryRevealScene />}
+      {!showMemoryReveal && <div id="memories-section" />}
     </div>
   );
 }
