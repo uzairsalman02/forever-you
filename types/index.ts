@@ -4,3 +4,11 @@ export interface SiteConfig {
   description: string;
   url: string;
 }
+
+export interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  isUnlocked: boolean;
+}

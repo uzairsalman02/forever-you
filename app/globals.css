@@ -17,3 +17,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0) scale(0.95);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-30px) scale(1.05);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-60px) scale(0.95);
+    opacity: 0.15;
+  }
+}
+
+.animate-float-particle {
+  animation: floatParticle 9s ease-in-out infinite alternate;
+}
