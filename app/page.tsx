@@ -7,6 +7,7 @@ import { CountdownScene } from "@/components/countdown/CountdownScene";
 import { HeroScene } from "@/components/hero/HeroScene";
 import { MemoryVaultScene } from "@/components/memory-vault/MemoryVaultScene";
 import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
+import { LetterScene } from "@/components/letter/LetterScene";
 
 export default function HomePage() {
   const { days, hours, minutes, seconds, isUnlocked, isHydrated } = useCountdown(
@@ -44,7 +45,15 @@ export default function HomePage() {
     }, 100);
   };
 
-  // Unlocked experience flow: Scene 2 (Hero) -> Scene 3 (Memory Vault) -> Scene 4 (Memory Reveal)
+  const handleSurpriseClick = () => {
+    const nextSection = document.getElementById("cake-section");
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  // Unlocked experience flow:
+  // Scene 2 (Hero) -> Scene 3 (Memory Vault) -> Scene 4 (Memory Reveal) -> Scene 5 (The Letter)
   return (
     <div className="w-full bg-background min-h-screen">
       <HeroScene />
@@ -53,6 +62,9 @@ export default function HomePage() {
       />
       {showMemoryReveal && <MemoryRevealScene />}
       {!showMemoryReveal && <div id="memories-section" />}
+      <LetterScene onSurpriseClick={handleSurpriseClick} />
+      {/* Scroll target anchor prepared for upcoming section */}
+      <div id="cake-section" />
     </div>
   );
 }
