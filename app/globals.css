@@ -18,21 +18,82 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-@keyframes floatParticle {
+/* 50-Second Dynamic Luxury Animated Gradient */
+@keyframes dynamicGradient {
   0% {
-    transform: translateY(0) scale(0.95);
-    opacity: 0.25;
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 100%;
   }
   50% {
-    transform: translateY(-30px) scale(1.05);
-    opacity: 0.55;
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 0%;
   }
   100% {
-    transform: translateY(-60px) scale(0.95);
-    opacity: 0.15;
+    background-position: 0% 50%;
   }
 }
 
-.animate-float-particle {
-  animation: floatParticle 9s ease-in-out infinite alternate;
+.animate-dynamic-gradient {
+  background: linear-gradient(
+    -45deg,
+    #fff5f7,
+    #fce7f3,
+    #fff1f2,
+    #f3e8ff,
+    #fdf2f4,
+    #fff5f7
+  );
+  background-size: 400% 400%;
+  animation: dynamicGradient 50s ease-in-out infinite;
+}
+
+/* Soft Ambient Drifting Light Orbs */
+@keyframes floatLight {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate(40px, -50px) scale(1.15);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate(-30px, 30px) scale(0.95);
+    opacity: 0.2;
+  }
+}
+
+.animate-float-light {
+  animation: floatLight 22s ease-in-out infinite alternate;
+}
+
+/* Gentle Birthday Bunting Swinging */
+@keyframes swingBunting {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(1.5deg);
+  }
+  100% {
+    transform: rotate(-1.5deg);
+  }
+}
+
+.animate-swing-bunting {
+  transform-origin: top center;
+  animation: swingBunting 6s ease-in-out infinite alternate;
+}
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-dynamic-gradient,
+  .animate-float-light,
+  .animate-swing-bunting {
+    animation: none !important;
+  }
 }

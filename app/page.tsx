@@ -11,6 +11,8 @@ import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 import { LetterScene } from "@/components/letter/LetterScene";
 import { CelebrationScene } from "@/components/celebration/CelebrationScene";
 import { MusicController } from "@/components/ui/MusicController";
+import { TopBunting } from "@/components/ui/TopBunting";
+import { GlobalParticleEngine } from "@/components/ui/GlobalParticleEngine";
 import {
   stopHappyBirthdayMusicBox,
   startMusicOnFirstInteraction,
@@ -111,8 +113,25 @@ export default function HomePage() {
   };
 
   return (
-    <div className="w-full bg-background min-h-screen relative">
-      {/* Global Experience Reset Soft Pink Overlay */}
+    <div className="w-full min-h-screen relative animate-dynamic-gradient overflow-x-hidden">
+      {/* 1. Global rAF Particle Engine (Hearts, Petals, Stars, Duck Doodles, Sparkles) */}
+      <GlobalParticleEngine />
+
+      {/* 2. Soft Ambient Drifting Light Orbs */}
+      <div
+        className="fixed top-1/4 left-10 w-96 h-96 rounded-full bg-rose-200/30 blur-[100px] pointer-events-none animate-float-light z-0"
+        aria-hidden="true"
+      />
+      <div
+        className="fixed bottom-1/3 right-10 w-[28rem] h-[28rem] rounded-full bg-purple-200/25 blur-[120px] pointer-events-none animate-float-light z-0"
+        style={{ animationDelay: "-11s" }}
+        aria-hidden="true"
+      />
+
+      {/* 3. Top Fabric Birthday Bunting Banner */}
+      <TopBunting />
+
+      {/* 4. Global Experience Reset Soft Pink Overlay */}
       <AnimatePresence>
         {isResettingOverlay && (
           <motion.div
@@ -125,9 +144,10 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      {/* Bottom-Right Floating Glassmorphism Music Controller */}
+      {/* 5. Floating Glassmorphic Music Controller Widget */}
       <MusicController />
 
+      {/* 6. Unlocked Interactive Story Scenes */}
       <HeroScene key={`hero-${experienceKey}`} onOpenGift={handleOpenGift} />
       <MemoryVaultScene
         key={`vault-${experienceKey}`}
