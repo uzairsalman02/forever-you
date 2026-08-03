@@ -11,6 +11,7 @@ const config: Config = {
       fontFamily: {
         serif: ["var(--font-cormorant)", "serif"],
         sans: ["var(--font-jakarta)", "sans-serif"],
+        calligraphy: ["var(--font-calligraphy)", "cursive"],
       },
       colors: {
         background: "var(--background)",

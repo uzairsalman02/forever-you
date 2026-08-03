@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { cormorantGaramond, plusJakartaSans } from "./fonts";
+import { cormorantGaramond, plusJakartaSans, greatVibes } from "./fonts";
 import { SITE_CONFIG } from "@/utils/constants";
 import "./globals.css";
 
@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorantGaramond.variable} ${plusJakartaSans.variable}`}
+      className={`${cormorantGaramond.variable} ${plusJakartaSans.variable} ${greatVibes.variable}`}
     >
       <body className="bg-background text-foreground antialiased min-h-screen">
         {children}
