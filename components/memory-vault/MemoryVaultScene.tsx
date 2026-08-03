@@ -28,6 +28,9 @@ export function MemoryVaultScene({
           nextSection.scrollIntoView({ behavior: "smooth" });
         }
       }
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 400);
     }, 1800);
   };
 
@@ -52,15 +55,15 @@ export function MemoryVaultScene({
       {/* Ambient Floating Particles */}
       <FloatingParticles />
 
-      {/* Cinematic White Glow Overlay during transition */}
+      {/* Clean White Flash Overlay during transition */}
       <AnimatePresence>
         {isTransitioning && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.85, 1] }}
+            animate={{ opacity: [0, 0.85, 0] }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.8, ease: "easeInOut" }}
-            className="fixed inset-0 z-50 bg-gradient-to-b from-white/95 via-rose-50/90 to-white/95 backdrop-blur-md pointer-events-none"
+            className="fixed inset-0 z-50 bg-white pointer-events-none"
           />
         )}
       </AnimatePresence>

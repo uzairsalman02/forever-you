@@ -53,16 +53,17 @@ export function MemoryRevealScene({
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full bg-white p-4 sm:p-5 pb-6 sm:pb-8 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-rose-100/70 mb-8"
+              className="w-full bg-white p-4 sm:p-5 pb-6 sm:pb-8 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-rose-100/70 mb-8"
             >
-              <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-zinc-100 shadow-inner">
+              <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-white">
                 <Image
                   src={currentMemory.image}
                   alt={currentMemory.title}
                   fill
-                  sizes="(max-width: 640px) 90vw, 500px"
+                  quality={100}
                   priority
-                  className="object-cover"
+                  sizes="(max-width: 640px) 90vw, 500px"
+                  className="object-cover opacity-100"
                 />
               </div>
             </motion.div>
