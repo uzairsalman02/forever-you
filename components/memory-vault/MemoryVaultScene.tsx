@@ -39,8 +39,8 @@ export function MemoryVaultScene({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.03,
-        delayChildren: 0.05,
+        staggerChildren: 0.02,
+        delayChildren: 0.04,
       },
     },
   };
@@ -55,7 +55,7 @@ export function MemoryVaultScene({
       {/* Ambient Floating Particles */}
       <FloatingParticles />
 
-      {/* Clean White Flash Overlay during transition */}
+      {/* Cinematic White Flash Overlay during transition */}
       <AnimatePresence>
         {isTransitioning && (
           <motion.div
@@ -87,13 +87,13 @@ export function MemoryVaultScene({
         </p>
       </motion.div>
 
-      {/* Dense 48-Photo Overlapping Tabletop Photo Scatter Layout */}
+      {/* Dense Viewport-Filling 50-Photo Overlapping Scatter Layout */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.02 }}
-        className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-wrap items-center justify-center py-6 px-1 sm:px-4 gap-y-4 sm:gap-y-6 md:gap-y-8"
+        className="relative z-10 w-full max-w-[1450px] mx-auto flex flex-wrap items-center justify-center py-4 px-1 sm:px-4 gap-y-4 sm:gap-y-6 md:gap-y-8"
       >
         {VAULT_MEMORIES.map((memory, index) => (
           <PolaroidCard
@@ -117,7 +117,7 @@ export function MemoryVaultScene({
           className="group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/90 backdrop-blur-md border border-rose-200/80 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-[0_4px_20px_rgba(244,114,182,0.12)] transition-all duration-500 hover:bg-white hover:border-rose-300 hover:shadow-[0_8px_30px_rgba(244,114,182,0.25)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="relative z-10 flex items-center gap-2">
-            {isTransitioning ? "Opening Vault..." : "Relive Our Memories"} <span className="text-rose-500">❤️</span>
+            {isTransitioning ? "Entering Memory..." : "Relive Our Memories"} <span className="text-rose-500">❤️</span>
           </span>
           <span className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-100/50 to-pink-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
         </button>
