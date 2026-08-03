@@ -8,6 +8,7 @@ import { HeroScene } from "@/components/hero/HeroScene";
 import { MemoryVaultScene } from "@/components/memory-vault/MemoryVaultScene";
 import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 import { LetterScene } from "@/components/letter/LetterScene";
+import { CelebrationScene } from "@/components/celebration/CelebrationScene";
 
 export default function HomePage() {
   const { days, hours, minutes, seconds, isUnlocked, isHydrated } = useCountdown(
@@ -46,25 +47,31 @@ export default function HomePage() {
   };
 
   const handleSurpriseClick = () => {
-    const nextSection = document.getElementById("cake-section");
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: "smooth" });
+    const cakeSection = document.getElementById("cake-section");
+    if (cakeSection) {
+      cakeSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  // Unlocked experience flow:
-  // Scene 2 (Hero) -> Scene 3 (Memory Vault) -> Scene 4 (Memory Reveal) -> Scene 5 (The Letter)
+  const handleOpenGift = () => {
+    const memoryVault = document.getElementById("memory-vault");
+    if (memoryVault) {
+      memoryVault.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  // Complete unlocked experience flow:
+  // Scene 2 (Hero) -> Scene 3 (Memory Vault) -> Scene 4 (Memory Reveal) -> Scene 5 (The Letter) -> Scene 6 (Celebration)
   return (
     <div className="w-full bg-background min-h-screen">
-      <HeroScene />
+      <HeroScene onOpenGift={handleOpenGift} />
       <MemoryVaultScene
         onTransitionComplete={handleVaultTransitionComplete}
       />
       {showMemoryReveal && <MemoryRevealScene />}
       {!showMemoryReveal && <div id="memories-section" />}
       <LetterScene onSurpriseClick={handleSurpriseClick} />
-      {/* Scroll target anchor prepared for upcoming section */}
-      <div id="cake-section" />
+      <CelebrationScene />
     </div>
   );
 }

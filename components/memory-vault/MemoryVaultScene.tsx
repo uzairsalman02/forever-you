@@ -19,7 +19,6 @@ export function MemoryVaultScene({
     if (isTransitioning) return;
     setIsTransitioning(true);
 
-    // After 1.8 seconds transition completes
     setTimeout(() => {
       if (onTransitionComplete) {
         onTransitionComplete();
@@ -37,8 +36,8 @@ export function MemoryVaultScene({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
+        staggerChildren: 0.03,
+        delayChildren: 0.05,
       },
     },
   };
@@ -46,11 +45,11 @@ export function MemoryVaultScene({
   return (
     <section
       id="memory-vault"
-      className={`relative min-h-screen w-full flex flex-col items-center justify-between py-20 px-4 sm:px-6 md:px-12 bg-background overflow-hidden select-none transition-all duration-1000 ${
+      className={`relative min-h-screen w-full flex flex-col items-center justify-between py-16 px-2 sm:px-6 md:px-10 bg-background overflow-hidden select-none transition-all duration-1000 ${
         isTransitioning ? "pointer-events-none" : ""
       }`}
     >
-      {/* Background Floating Ambient Particles */}
+      {/* Ambient Floating Particles */}
       <FloatingParticles />
 
       {/* Cinematic White Glow Overlay during transition */}
@@ -58,10 +57,10 @@ export function MemoryVaultScene({
         {isTransitioning && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.8, 1] }}
+            animate={{ opacity: [0, 0.85, 1] }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.8, ease: "easeInOut" }}
-            className="fixed inset-0 z-50 bg-gradient-to-b from-white/90 via-rose-50/80 to-white/90 backdrop-blur-md pointer-events-none"
+            className="fixed inset-0 z-50 bg-gradient-to-b from-white/95 via-rose-50/90 to-white/95 backdrop-blur-md pointer-events-none"
           />
         )}
       </AnimatePresence>
@@ -69,10 +68,10 @@ export function MemoryVaultScene({
       {/* Header Container */}
       <motion.div
         animate={isTransitioning ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
         className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto mb-8 sm:mb-12"
       >
-        <span className="font-sans text-xs tracking-[0.3em] uppercase text-zinc-400 mb-4 font-medium">
+        <span className="font-sans text-xs tracking-[0.35em] uppercase text-zinc-400 mb-3 font-medium">
           Memory Vault
         </span>
         <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light text-zinc-900 tracking-tight leading-[1.15] mb-6">
@@ -85,13 +84,13 @@ export function MemoryVaultScene({
         </p>
       </motion.div>
 
-      {/* Organic Tabletop Photo Scatter Layout */}
+      {/* Dense 48-Photo Overlapping Tabletop Photo Scatter Layout */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.05 }}
-        className="relative z-10 w-full max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-y-8 sm:gap-y-12 md:gap-y-16 py-8 px-2 sm:px-6"
+        viewport={{ once: true, amount: 0.02 }}
+        className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-wrap items-center justify-center py-6 px-1 sm:px-4 gap-y-4 sm:gap-y-6 md:gap-y-8"
       >
         {VAULT_MEMORIES.map((memory, index) => (
           <PolaroidCard
@@ -112,7 +111,7 @@ export function MemoryVaultScene({
         <button
           onClick={handleButtonClick}
           disabled={isTransitioning}
-          className="group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/80 backdrop-blur-md border border-rose-200/80 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-[0_4px_20px_rgba(244,114,182,0.12)] transition-all duration-500 hover:bg-white hover:border-rose-300 hover:shadow-[0_8px_30px_rgba(244,114,182,0.25)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/90 backdrop-blur-md border border-rose-200/80 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-[0_4px_20px_rgba(244,114,182,0.12)] transition-all duration-500 hover:bg-white hover:border-rose-300 hover:shadow-[0_8px_30px_rgba(244,114,182,0.25)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="relative z-10 flex items-center gap-2">
             {isTransitioning ? "Opening Vault..." : "Relive Our Memories"} <span className="text-rose-500">❤️</span>

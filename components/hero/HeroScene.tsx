@@ -36,15 +36,17 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
     if (onOpenGift) {
       onOpenGift();
     } else {
-      const nextSection = document.getElementById("next-section");
-      if (nextSection) {
-        nextSection.scrollIntoView({ behavior: "smooth" });
+      const targetSection =
+        document.getElementById("memory-vault") ||
+        document.getElementById("next-section");
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: "smooth" });
       }
     }
   };
 
   return (
-    <section className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 text-center select-none overflow-hidden bg-background">
+    <section id="hero-section" className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 text-center select-none overflow-hidden bg-background">
       {/* Ambient background particles */}
       <FloatingParticles />
 
