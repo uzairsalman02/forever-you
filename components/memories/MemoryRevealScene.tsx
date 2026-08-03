@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, TouchEvent } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { DETAILED_MEMORIES } from "@/content/detailedMemories";
 
@@ -14,96 +14,184 @@ export function MemoryRevealScene({
   onFinishMemories,
 }: MemoryRevealSceneProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const totalMemories = DETAILED_MEMORIES.length;
   const currentMemory = DETAILED_MEMORIES[currentIndex];
 
-  const handleNextMemory = () => {
-    if (currentIndex < DETAILED_MEMORIES.length - 1) {
+  const handleNext = useCallback(() => {
+    setDirection(1);
+    if (currentIndex < totalMemories - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
       if (onFinishMemories) {
         onFinishMemories();
       } else {
-        // Loop back to beginning for smooth exploration
+        // Loop smoothly to first memory
         setCurrentIndex(0);
       }
     }
+  }, [currentIndex, totalMemories, onFinishMemories]);
+
+  const handlePrev = useCallback(() => {
+    setDirection(-1);
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    } else {
+      setCurrentIndex(totalMemories - 1);
+    }
+  }, [currentIndex, totalMemories]);
+
+  // Keyboard navigation listener (← / →)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        handleNext();
+      } else if (e.key === "ArrowLeft") {
+        handlePrev();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleNext, handlePrev]);
+
+  // Preload next image in background for zero load latency
+  useEffect(() => {
+    const nextIndex = (currentIndex + 1) % totalMemories;
+    const nextImageUrl = DETAILED_MEMORIES[nextIndex].image;
+    if (typeof window !== "undefined" && nextImageUrl) {
+      const img = new window.Image();
+      img.src = nextImageUrl;
+    }
+  }, [currentIndex, totalMemories]);
+
+  // Mobile Touch Swipe Handling
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffX = touchStartX - touchEndX;
+
+    if (Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        handleNext(); // Swipe Left -> Next
+      } else {
+        handlePrev(); // Swipe Right -> Prev
+      }
+    }
+    setTouchStartX(null);
+  };
+
+  const slideVariants: Variants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 90 : -90,
+      opacity: 0,
+      scale: 0.98,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.65,
+        ease: "easeInOut",
+      },
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -90 : 90,
+      opacity: 0,
+      scale: 0.98,
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    }),
   };
 
   return (
     <section
       id="memories-section"
-      className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 sm:p-10 bg-background select-none overflow-hidden"
+      className="relative min-h-screen w-full flex flex-col items-center justify-between py-12 px-4 sm:px-8 md:px-12 bg-background select-none overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Background Ambient Floating Particles */}
       <FloatingParticles />
 
-      {/* Main Single-Memory Album Showcase */}
-      <div className="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center text-center">
-        <AnimatePresence mode="wait">
+      {/* Main Single-Memory Fullscreen Experience */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center my-auto">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentMemory.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="w-full flex flex-col items-center"
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="w-full flex flex-col items-center text-center"
           >
-            {/* Centered Large Portrait Polaroid Frame */}
+            {/* Fullscreen Image Container (Occupies 70-80% of Viewport Height) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full bg-white p-4 sm:p-5 pb-6 sm:pb-8 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-rose-100/70 mb-8"
+              animate={{ y: [0, -4, 0] }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="relative w-full h-[65vh] sm:h-[72vh] md:h-[76vh] max-w-4xl bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.12)] border border-rose-100/70 mb-6 sm:mb-8 overflow-hidden will-change-transform"
             >
-              <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-white">
+              <div className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-100">
                 <Image
                   src={currentMemory.image}
                   alt={currentMemory.title}
                   fill
                   quality={100}
                   priority
-                  sizes="(max-width: 640px) 90vw, 500px"
+                  sizes="(max-width: 640px) 95vw, (max-width: 1024px) 85vw, 1100px"
                   className="object-cover opacity-100"
                 />
               </div>
             </motion.div>
 
-            {/* Title & Emotional Paragraph (Appears After Image) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.35, ease: "easeOut" }}
-              className="flex flex-col items-center max-w-md px-2 mb-10"
-            >
-              <span className="font-sans text-xs tracking-[0.35em] uppercase text-zinc-400 mb-3 font-medium">
-                {currentMemory.date}
-              </span>
-              <h3 className="font-serif text-3xl sm:text-4xl font-light text-zinc-900 tracking-tight leading-snug mb-4">
+            {/* Memory Details: Title & Description Below Image */}
+            <div className="flex flex-col items-center max-w-xl px-4 mb-6">
+              <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-zinc-900 tracking-tight leading-snug mb-2">
                 {currentMemory.title}
               </h3>
-              <p className="font-sans text-sm sm:text-base font-normal text-zinc-600 leading-relaxed whitespace-pre-line">
+              <p className="font-sans text-xs sm:text-sm md:text-base font-normal text-zinc-600 leading-relaxed">
                 {currentMemory.description}
               </p>
-            </motion.div>
-
-            {/* Next Memory Button (Appears Last) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.65, ease: "easeOut" }}
-            >
-              <button
-                onClick={handleNextMemory}
-                className="group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/90 backdrop-blur-md border border-rose-200/80 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-[0_4px_20px_rgba(244,114,182,0.12)] transition-all duration-500 hover:bg-white hover:border-rose-300 hover:shadow-[0_8px_30px_rgba(244,114,182,0.25)] hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Next Memory <span className="text-rose-500">❤️</span>
-                </span>
-                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-100/50 to-pink-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-              </button>
-            </motion.div>
+            </div>
           </motion.div>
         </AnimatePresence>
+      </div>
+
+      {/* Navigation Controls Bar */}
+      <div className="relative z-20 w-full max-w-md mx-auto flex items-center justify-between mt-4 px-2">
+        {/* Previous Button */}
+        <button
+          onClick={handlePrev}
+          className="group inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white/80 backdrop-blur-md border border-rose-200/70 text-zinc-700 font-sans text-xs sm:text-sm font-medium transition-all duration-300 hover:bg-white hover:border-rose-300 hover:shadow-md hover:scale-105 active:scale-95"
+        >
+          <span>←</span> <span>Previous</span>
+        </button>
+
+        {/* Counter Display */}
+        <span className="font-sans text-xs sm:text-sm font-medium tracking-widest text-zinc-500 uppercase">
+          Memory {currentIndex + 1} / {totalMemories}
+        </span>
+
+        {/* Next Button */}
+        <button
+          onClick={handleNext}
+          className="group inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white/80 backdrop-blur-md border border-rose-200/70 text-zinc-700 font-sans text-xs sm:text-sm font-medium transition-all duration-300 hover:bg-white hover:border-rose-300 hover:shadow-md hover:scale-105 active:scale-95"
+        >
+          <span>Next</span> <span>→</span>
+        </button>
       </div>
     </section>
   );

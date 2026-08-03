@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_CONFIG } from "@/content/release";
 import { useCountdown } from "@/hooks/useCountdown";
 import { CountdownScene } from "@/components/countdown/CountdownScene";
@@ -9,6 +10,11 @@ import { MemoryVaultScene } from "@/components/memory-vault/MemoryVaultScene";
 import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 import { LetterScene } from "@/components/letter/LetterScene";
 import { CelebrationScene } from "@/components/celebration/CelebrationScene";
+import { MusicController } from "@/components/ui/MusicController";
+import {
+  stopHappyBirthdayMusicBox,
+  startMusicOnFirstInteraction,
+} from "@/utils/audio";
 
 export default function HomePage() {
   const { days, hours, minutes, seconds, isUnlocked, isHydrated } = useCountdown(
@@ -16,6 +22,25 @@ export default function HomePage() {
     RELEASE_CONFIG.developmentMode
   );
   const [showMemoryReveal, setShowMemoryReveal] = useState(false);
+  const [experienceKey, setExperienceKey] = useState(0);
+  const [isResettingOverlay, setIsResettingOverlay] = useState(false);
+
+  // Register first user gesture listener to gently start background music
+  useEffect(() => {
+    const handleFirstGesture = () => {
+      startMusicOnFirstInteraction();
+    };
+
+    window.addEventListener("click", handleFirstGesture, { once: true });
+    window.addEventListener("touchstart", handleFirstGesture, { once: true });
+    window.addEventListener("scroll", handleFirstGesture, { once: true });
+
+    return () => {
+      window.removeEventListener("click", handleFirstGesture);
+      window.removeEventListener("touchstart", handleFirstGesture);
+      window.removeEventListener("scroll", handleFirstGesture);
+    };
+  }, []);
 
   // Prevent flash before client hydration
   if (!isHydrated) {
@@ -36,6 +61,13 @@ export default function HomePage() {
     );
   }
 
+  const handleOpenGift = () => {
+    const memoryVault = document.getElementById("memory-vault");
+    if (memoryVault) {
+      memoryVault.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const handleVaultTransitionComplete = () => {
     setShowMemoryReveal(true);
     setTimeout(() => {
@@ -53,25 +85,66 @@ export default function HomePage() {
     }
   };
 
-  const handleOpenGift = () => {
-    const memoryVault = document.getElementById("memory-vault");
-    if (memoryVault) {
-      memoryVault.scrollIntoView({ behavior: "smooth" });
-    }
+  // Full Experience Reset Handler
+  const handleGlobalReset = () => {
+    if (isResettingOverlay) return;
+
+    // Step 1: Smoothly fade screen to soft pink overlay over 600ms
+    setIsResettingOverlay(true);
+
+    setTimeout(() => {
+      // Step 2: Stop any active Web Audio playback
+      stopHappyBirthdayMusicBox();
+
+      // Step 3: Increment experience key to unmount and re-mount all scene components with fresh initial state
+      setExperienceKey((prev) => prev + 1);
+      setShowMemoryReveal(false);
+
+      // Step 4: Instantly scroll to top while screen is covered by overlay
+      window.scrollTo({ top: 0, behavior: "instant" });
+
+      // Step 5: Fade overlay out smoothly over 600ms
+      setTimeout(() => {
+        setIsResettingOverlay(false);
+      }, 100);
+    }, 600);
   };
 
-  // Complete unlocked experience flow:
-  // Scene 2 (Hero) -> Scene 3 (Memory Vault) -> Scene 4 (Memory Reveal) -> Scene 5 (The Letter) -> Scene 6 (Celebration)
   return (
-    <div className="w-full bg-background min-h-screen">
-      <HeroScene onOpenGift={handleOpenGift} />
+    <div className="w-full bg-background min-h-screen relative">
+      {/* Global Experience Reset Soft Pink Overlay */}
+      <AnimatePresence>
+        {isResettingOverlay && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="fixed inset-0 z-[100] bg-[#fff5f7] pointer-events-none"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Bottom-Right Floating Glassmorphism Music Controller */}
+      <MusicController />
+
+      <HeroScene key={`hero-${experienceKey}`} onOpenGift={handleOpenGift} />
       <MemoryVaultScene
+        key={`vault-${experienceKey}`}
         onTransitionComplete={handleVaultTransitionComplete}
       />
-      {showMemoryReveal && <MemoryRevealScene />}
+      {showMemoryReveal && (
+        <MemoryRevealScene key={`reveal-${experienceKey}`} />
+      )}
       {!showMemoryReveal && <div id="memories-section" />}
-      <LetterScene onSurpriseClick={handleSurpriseClick} />
-      <CelebrationScene />
+      <LetterScene
+        key={`letter-${experienceKey}`}
+        onSurpriseClick={handleSurpriseClick}
+      />
+      <CelebrationScene
+        key={`celebration-${experienceKey}`}
+        onReplayClick={handleGlobalReset}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { WaxSeal } from "./WaxSeal";
 import { LetterPaper } from "./LetterPaper";
+import { playEnvelopeSound } from "@/utils/audio";
 
 interface LetterSceneProps {
   onSurpriseClick?: () => void;
@@ -16,6 +17,7 @@ export function LetterScene({ onSurpriseClick }: LetterSceneProps) {
   const handleOpenLetter = () => {
     if (isOpen || isOpening) return;
     setIsOpening(true);
+    playEnvelopeSound();
 
     // Sequence: Wax seal breaks -> flap opens -> letter slides up
     setTimeout(() => {

@@ -5,7 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { LuxuryCake } from "@/components/cake/LuxuryCake";
 import { CelebrationOverlay } from "./CelebrationOverlay";
-import { playHappyBirthdayMusicBox } from "@/utils/audio";
+import {
+  playHappyBirthdayMusicBox,
+  playCandleBlowSound,
+  playCakeCutSound,
+  playCelebrationSound,
+} from "@/utils/audio";
 
 interface CelebrationSceneProps {
   onReplayClick?: () => void;
@@ -26,6 +31,7 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
     if (isBlowing || hasBlown) return;
     setIsBlowing(true);
     setIsDimmed(true);
+    playCandleBlowSound();
 
     setTimeout(() => {
       setIsLit(false);
@@ -44,6 +50,8 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
     if (isCut) return;
     setIsCut(true);
     setIsCelebrating(true);
+    playCakeCutSound();
+    playCelebrationSound();
 
     // Play Happy Birthday Web Audio music box melody
     playHappyBirthdayMusicBox();
