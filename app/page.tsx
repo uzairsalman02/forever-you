@@ -10,6 +10,7 @@ import { MemoryVaultScene } from "@/components/memory-vault/MemoryVaultScene";
 import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 import { LetterScene } from "@/components/letter/LetterScene";
 import { CelebrationScene } from "@/components/celebration/CelebrationScene";
+import { CinematicDuckIntro } from "@/components/intro/CinematicDuckIntro";
 import { MusicController } from "@/components/ui/MusicController";
 import { useAudio } from "@/context/AudioContext";
 
@@ -21,7 +22,25 @@ export default function HomePage() {
   const [showMemoryReveal, setShowMemoryReveal] = useState(false);
   const [experienceKey, setExperienceKey] = useState(0);
   const [isResettingOverlay, setIsResettingOverlay] = useState(false);
+  const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
   const { stopAllAudio } = useAudio();
+
+  // Check if intro was already played in current browser session
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const played = sessionStorage.getItem("forever_you_duck_intro_played");
+      if (played === "true") {
+        setHasPlayedIntro(true);
+      }
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    setHasPlayedIntro(true);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("forever_you_duck_intro_played", "true");
+    }
+  };
 
   // Prevent flash before client hydration
   if (!isHydrated) {
@@ -93,6 +112,11 @@ export default function HomePage() {
 
   return (
     <div className="w-full min-h-screen relative bg-transparent overflow-x-hidden">
+      {/* One-Time Cinematic Baby Duck Opening Sequence */}
+      {!hasPlayedIntro && (
+        <CinematicDuckIntro onComplete={handleIntroComplete} />
+      )}
+
       {/* Global Experience Reset Soft Pink Overlay */}
       <AnimatePresence>
         {isResettingOverlay && (
