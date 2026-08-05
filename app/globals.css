@@ -18,70 +18,84 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 25-Second Dynamic Luxury Animated Gradient (20-30s cycle) */
-@keyframes dynamicGradient {
+/* ====================================================
+   LAYER 1: ANIMATED AURORA GRADIENT (45-60s Cycle)
+   ==================================================== */
+@keyframes auroraMorph {
   0% {
     background-position: 0% 50%;
   }
-  25% {
+  20% {
     background-position: 50% 100%;
   }
-  50% {
+  40% {
     background-position: 100% 50%;
   }
-  75% {
-    background-position: 50% 0%;
+  60% {
+    background-position: 75% 0%;
+  }
+  80% {
+    background-position: 25% 100%;
   }
   100% {
     background-position: 0% 50%;
   }
 }
 
-.animate-dynamic-gradient {
+.animate-aurora-gradient {
   background: linear-gradient(
     -45deg,
     #fff5f7,
     #fce7f3,
     #fff1f2,
     #f3e8ff,
-    #fdf2f4,
+    #fdf6e2,
+    #faf6ee,
     #fff5f7
   );
   background-size: 400% 400%;
-  animation: dynamicGradient 25s ease-in-out infinite;
+  animation: auroraMorph 50s ease-in-out infinite alternate;
 }
 
-/* Soft Ambient Drifting Light Orbs */
-@keyframes floatLight {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.25;
-  }
-  50% {
-    transform: translate(40px, -50px) scale(1.15);
-    opacity: 0.45;
-  }
-  100% {
-    transform: translate(-30px, 30px) scale(0.95);
-    opacity: 0.2;
-  }
+/* ====================================================
+   LAYER 2: AMBIENT GLOW BLOBS (25-45s Cycle)
+   ==================================================== */
+@keyframes blobFloat1 {
+  0% { transform: translate(0px, 0px) scale(1); opacity: 0.35; }
+  33% { transform: translate(80px, -70px) scale(1.2); opacity: 0.55; }
+  66% { transform: translate(-40px, 50px) scale(0.9); opacity: 0.3; }
+  100% { transform: translate(0px, 0px) scale(1); opacity: 0.35; }
 }
 
-.animate-float-light {
-  animation: floatLight 22s ease-in-out infinite alternate;
+@keyframes blobFloat2 {
+  0% { transform: translate(0px, 0px) scale(1.1); opacity: 0.4; }
+  33% { transform: translate(-90px, 60px) scale(0.95); opacity: 0.25; }
+  66% { transform: translate(60px, -50px) scale(1.25); opacity: 0.5; }
+  100% { transform: translate(0px, 0px) scale(1.1); opacity: 0.4; }
 }
+
+@keyframes blobFloat3 {
+  0% { transform: translate(0px, 0px) scale(0.9); opacity: 0.3; }
+  50% { transform: translate(70px, 80px) scale(1.15); opacity: 0.55; }
+  100% { transform: translate(0px, 0px) scale(0.9); opacity: 0.3; }
+}
+
+@keyframes blobFloat4 {
+  0% { transform: translate(0px, 0px) scale(1); opacity: 0.45; }
+  50% { transform: translate(-60px, -80px) scale(1.2); opacity: 0.25; }
+  100% { transform: translate(0px, 0px) scale(1); opacity: 0.45; }
+}
+
+.animate-blob-1 { animation: blobFloat1 32s ease-in-out infinite; }
+.animate-blob-2 { animation: blobFloat2 38s ease-in-out infinite; }
+.animate-blob-3 { animation: blobFloat3 28s ease-in-out infinite; }
+.animate-blob-4 { animation: blobFloat4 42s ease-in-out infinite; }
 
 /* Gentle Birthday Bunting Swinging */
 @keyframes swingBunting {
-  0% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(1.5deg);
-  }
-  100% {
-    transform: rotate(-1.5deg);
-  }
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(1.5deg); }
+  100% { transform: rotate(-1.5deg); }
 }
 
 .animate-swing-bunting {
@@ -91,8 +105,11 @@ body {
 
 /* Reduced Motion Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .animate-dynamic-gradient,
-  .animate-float-light,
+  .animate-aurora-gradient,
+  .animate-blob-1,
+  .animate-blob-2,
+  .animate-blob-3,
+  .animate-blob-4,
   .animate-swing-bunting {
     animation: none !important;
   }

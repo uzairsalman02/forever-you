@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { WaxSeal } from "./WaxSeal";
 import { LetterPaper } from "./LetterPaper";
 import { LETTER_CONFIG } from "@/content/letterConfig";
@@ -33,10 +32,8 @@ export function LetterScene({ onSurpriseClick }: LetterSceneProps) {
   return (
     <section
       id="letter-section"
-      className="relative min-h-screen w-full flex flex-col items-center justify-center py-20 px-4 sm:px-8 bg-background select-none overflow-hidden"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center py-20 px-4 sm:px-8 bg-transparent select-none overflow-hidden"
     >
-      {/* Ambient Floating Particles */}
-      <FloatingParticles />
 
       {/* Header Container (Visible before opening) */}
       {!isOpen && (

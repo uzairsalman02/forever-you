@@ -11,12 +11,7 @@ import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 import { LetterScene } from "@/components/letter/LetterScene";
 import { CelebrationScene } from "@/components/celebration/CelebrationScene";
 import { MusicController } from "@/components/ui/MusicController";
-import { TopBunting } from "@/components/ui/TopBunting";
-import { GlobalParticleEngine } from "@/components/ui/GlobalParticleEngine";
-import {
-  stopHappyBirthdayMusicBox,
-  startMusicOnFirstInteraction,
-} from "@/utils/audio";
+import { useAudio } from "@/context/AudioContext";
 
 export default function HomePage() {
   const { days, hours, minutes, seconds, isUnlocked, isHydrated } = useCountdown(
@@ -26,28 +21,12 @@ export default function HomePage() {
   const [showMemoryReveal, setShowMemoryReveal] = useState(false);
   const [experienceKey, setExperienceKey] = useState(0);
   const [isResettingOverlay, setIsResettingOverlay] = useState(false);
-
-  // Register first user gesture listener to gently start background music
-  useEffect(() => {
-    const handleFirstGesture = () => {
-      startMusicOnFirstInteraction();
-    };
-
-    window.addEventListener("click", handleFirstGesture, { once: true });
-    window.addEventListener("touchstart", handleFirstGesture, { once: true });
-    window.addEventListener("scroll", handleFirstGesture, { once: true });
-
-    return () => {
-      window.removeEventListener("click", handleFirstGesture);
-      window.removeEventListener("touchstart", handleFirstGesture);
-      window.removeEventListener("scroll", handleFirstGesture);
-    };
-  }, []);
+  const { stopAllAudio } = useAudio();
 
   // Prevent flash before client hydration
   if (!isHydrated) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-background" />
+      <main className="min-h-screen flex items-center justify-center bg-transparent" />
     );
   }
 
@@ -96,7 +75,7 @@ export default function HomePage() {
 
     setTimeout(() => {
       // Step 2: Stop any active Web Audio playback
-      stopHappyBirthdayMusicBox();
+      stopAllAudio();
 
       // Step 3: Increment experience key to unmount and re-mount all scene components with fresh initial state
       setExperienceKey((prev) => prev + 1);
@@ -113,25 +92,8 @@ export default function HomePage() {
   };
 
   return (
-    <div className="w-full min-h-screen relative animate-dynamic-gradient overflow-x-hidden">
-      {/* 1. Global rAF Particle Engine (Hearts, Petals, Stars, Duck Doodles, Sparkles) */}
-      <GlobalParticleEngine />
-
-      {/* 2. Soft Ambient Drifting Light Orbs */}
-      <div
-        className="fixed top-1/4 left-10 w-96 h-96 rounded-full bg-rose-200/30 blur-[100px] pointer-events-none animate-float-light z-0"
-        aria-hidden="true"
-      />
-      <div
-        className="fixed bottom-1/3 right-10 w-[28rem] h-[28rem] rounded-full bg-purple-200/25 blur-[120px] pointer-events-none animate-float-light z-0"
-        style={{ animationDelay: "-11s" }}
-        aria-hidden="true"
-      />
-
-      {/* 3. Top Fabric Birthday Bunting Banner */}
-      <TopBunting />
-
-      {/* 4. Global Experience Reset Soft Pink Overlay */}
+    <div className="w-full min-h-screen relative bg-transparent overflow-x-hidden">
+      {/* Global Experience Reset Soft Pink Overlay */}
       <AnimatePresence>
         {isResettingOverlay && (
           <motion.div
@@ -144,10 +106,10 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      {/* 5. Floating Glassmorphic Music Controller Widget */}
+      {/* Floating Glassmorphic Music Controller Widget */}
       <MusicController />
 
-      {/* 6. Unlocked Interactive Story Scenes */}
+      {/* Unlocked Interactive Story Scenes */}
       <HeroScene key={`hero-${experienceKey}`} onOpenGift={handleOpenGift} />
       <MemoryVaultScene
         key={`vault-${experienceKey}`}

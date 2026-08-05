@@ -2,7 +2,6 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
-import { FloatingParticles } from "@/components/ui/FloatingParticles";
 
 interface HeroSceneProps {
   onOpenGift?: () => void;
@@ -48,10 +47,8 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
   return (
     <section
       id="hero-section"
-      className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none overflow-hidden bg-background"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none overflow-hidden bg-transparent"
     >
-      {/* Ambient Floating Particles */}
-      <FloatingParticles />
 
       {/* Subtle Luxury Sparkles floating in background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">

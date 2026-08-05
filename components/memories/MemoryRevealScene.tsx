@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback, TouchEvent } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { DETAILED_MEMORIES } from "@/content/detailedMemories";
 
 interface MemoryRevealSceneProps {
@@ -115,12 +114,10 @@ export function MemoryRevealScene({
   return (
     <section
       id="memories-section"
-      className="relative min-h-screen w-full flex flex-col items-center justify-between py-12 px-4 sm:px-8 md:px-12 bg-background select-none overflow-hidden"
+      className="relative min-h-screen w-full flex flex-col items-center justify-between py-12 px-4 sm:px-8 md:px-12 bg-transparent select-none overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Background Ambient Floating Particles */}
-      <FloatingParticles />
 
       {/* Main Single-Memory Fullscreen Experience */}
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center my-auto">

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { LuxuryCake } from "@/components/cake/LuxuryCake";
 import { CelebrationOverlay } from "./CelebrationOverlay";
 import { useAudio } from "@/context/AudioContext";
@@ -81,7 +80,7 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
   return (
     <section
       id="cake-section"
-      className="relative min-h-screen w-full flex flex-col items-center justify-between py-16 px-4 sm:px-8 md:px-12 bg-background select-none overflow-hidden"
+      className="relative min-h-screen w-full flex flex-col items-center justify-between py-16 px-4 sm:px-8 md:px-12 bg-transparent select-none overflow-hidden"
     >
       {/* 2.5-Second Romantic Transition Screen */}
       <AnimatePresence>
@@ -119,9 +118,6 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
 
       {/* Celebration Particle Overlay (Confetti, Hearts, Fireworks, Petals) */}
       <CelebrationOverlay isCelebrating={isCelebrating} />
-
-      {/* Ambient Floating Background Particles */}
-      <FloatingParticles />
 
       {/* Main Content Container */}
       <div className="relative z-20 w-full max-w-3xl mx-auto flex flex-col items-center text-center my-auto">

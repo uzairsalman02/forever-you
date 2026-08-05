@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { VAULT_MEMORIES } from "@/content/vaultMemories";
 import { PolaroidCard } from "./PolaroidCard";
 
@@ -48,12 +47,10 @@ export function MemoryVaultScene({
   return (
     <section
       id="memory-vault"
-      className={`relative min-h-screen w-full flex flex-col items-center justify-between py-16 px-2 sm:px-6 md:px-10 bg-background overflow-hidden select-none transition-all duration-1000 ${
+      className={`relative min-h-screen w-full flex flex-col items-center justify-between py-16 px-2 sm:px-6 md:px-10 bg-transparent overflow-hidden select-none transition-all duration-1000 ${
         isTransitioning ? "pointer-events-none" : ""
       }`}
     >
-      {/* Ambient Floating Particles */}
-      <FloatingParticles />
 
       {/* Cinematic White Flash Overlay during transition */}
       <AnimatePresence>

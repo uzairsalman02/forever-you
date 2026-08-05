@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { CountdownDisplay } from "./CountdownDisplay";
 
 interface CountdownSceneProps {
@@ -18,10 +17,7 @@ export function CountdownScene({
   seconds,
 }: CountdownSceneProps) {
   return (
-    <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 text-center select-none overflow-hidden">
-      {/* Subtle floating background ambient particles */}
-      <FloatingParticles />
-
+    <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none bg-transparent overflow-hidden">
       {/* Main Content Container */}
       <main className="relative z-10 flex flex-col items-center max-w-2xl mx-auto px-4 py-12">
         {/* Subdued top tagline */}
