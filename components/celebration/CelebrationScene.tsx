@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LuxuryCake } from "@/components/cake/LuxuryCake";
 import { CelebrationOverlay } from "./CelebrationOverlay";
 import { useAudio } from "@/context/AudioContext";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 import { playHappyBirthdayMusicBox } from "@/utils/audio";
 
 interface CelebrationSceneProps {
@@ -12,6 +13,8 @@ interface CelebrationSceneProps {
 }
 
 export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
+  const { config } = useSiteConfig();
+  const { finalMessage, general } = config;
   // State Machine: transition -> wish -> blow -> cut -> celebrate -> finalMessage
   const [showTransitionScreen, setShowTransitionScreen] = useState(true);
 
@@ -183,13 +186,10 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
               className="flex flex-col items-center text-center max-w-md mx-auto mt-6 p-6 sm:p-8 rounded-2xl bg-white/80 backdrop-blur-md border border-rose-100 shadow-[0_12px_40px_rgba(244,114,182,0.12)]"
             >
               <h3 className="font-calligraphy text-4xl sm:text-5xl font-normal text-rose-950 mb-4">
-                Happy Birthday <span className="font-sans text-3xl text-rose-500">❤️</span>
+                {finalMessage.title || `Happy Birthday ${general.recipientName}`} <span className="font-sans text-3xl text-rose-500">❤️</span>
               </h3>
-              <p className="font-serif text-base sm:text-lg font-normal text-zinc-700 leading-relaxed mb-4">
-                Thank you for every beautiful memory.
-              </p>
-              <p className="font-sans text-sm sm:text-base font-normal text-zinc-600 leading-relaxed whitespace-pre-line mb-8">
-                {"I still choose you...\nJust like I did in 2013.\nAnd I always will."}
+              <p className="font-serif text-base sm:text-lg font-normal text-zinc-700 leading-relaxed mb-4 whitespace-pre-line">
+                {finalMessage.text}
               </p>
 
               {/* Read It Again Action Button */}
@@ -198,7 +198,7 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
                 className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white border border-rose-200 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-sm transition-all duration-300 hover:border-rose-300 hover:shadow-md hover:scale-[1.03] active:scale-[0.97]"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Read It Again <span className="text-rose-500">❤️</span>
+                  {finalMessage.buttonText || "Replay Experience ❤️"}
                 </span>
               </button>
             </motion.div>

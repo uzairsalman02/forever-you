@@ -2,13 +2,16 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
-import { LETTER_CONFIG } from "@/content/letterConfig";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 interface LetterPaperProps {
   onSurpriseClick?: () => void;
 }
 
 export function LetterPaper({ onSurpriseClick }: LetterPaperProps) {
+  const { config } = useSiteConfig();
+  const { letter, general } = config;
+
   const containerVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -57,22 +60,17 @@ export function LetterPaper({ onSurpriseClick }: LetterPaperProps) {
           variants={paragraphVariants}
           className="font-calligraphy text-5xl sm:text-6xl md:text-7xl font-normal text-zinc-900 tracking-tight leading-tight mb-8 text-rose-950/90 drop-shadow-sm"
         >
-          {LETTER_CONFIG.title}
+          {general.letterTitle || letter.title}
         </motion.h2>
 
         {/* Paragraph-by-Paragraph Reveal Stream */}
         <div className="w-full space-y-6 sm:space-y-8 text-left mb-12">
-          {LETTER_CONFIG.paragraphs.map((p) => (
+          {letter.paragraphs.map((p, idx) => (
             <motion.div
-              key={p.id}
+              key={p.id || idx}
               variants={paragraphVariants}
               className="group relative"
             >
-              {/* Optional Small Marker Indicator */}
-              <span className="font-sans text-[10px] tracking-widest text-rose-400/80 uppercase font-semibold block mb-1">
-                {p.marker}
-              </span>
-              {/* Body Text */}
               <p className="font-serif text-base sm:text-lg font-normal text-zinc-800 leading-[1.9] tracking-wide whitespace-pre-line">
                 {p.text}
               </p>
@@ -94,7 +92,7 @@ export function LetterPaper({ onSurpriseClick }: LetterPaperProps) {
             className="group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/90 backdrop-blur-md border border-rose-200/80 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-[0_4px_20px_rgba(244,114,182,0.14)] transition-all duration-500 hover:bg-white hover:border-rose-300 hover:shadow-[0_8px_30px_rgba(244,114,182,0.25)] hover:scale-[1.03] active:scale-[0.97]"
           >
             <span className="relative z-10 flex items-center gap-2">
-              {LETTER_CONFIG.buttonText}
+              {letter.buttonText}
             </span>
             <span className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-100/50 to-pink-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
           </button>

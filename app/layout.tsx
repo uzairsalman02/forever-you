@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { cormorantGaramond, plusJakartaSans, greatVibes } from "./fonts";
 import { SITE_CONFIG } from "@/utils/constants";
 import { AudioProvider } from "@/context/AudioContext";
-import { CinematicBackgroundEngine } from "@/components/ui/CinematicBackgroundEngine";
+import { SiteConfigProvider } from "@/context/SiteConfigContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -41,7 +41,9 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${plusJakartaSans.variable} ${greatVibes.variable}`}
     >
       <body className="bg-background text-foreground antialiased min-h-screen relative overflow-x-hidden">
-        <AudioProvider>{children}</AudioProvider>
+        <SiteConfigProvider>
+          <AudioProvider>{children}</AudioProvider>
+        </SiteConfigProvider>
       </body>
     </html>
   );

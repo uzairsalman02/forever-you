@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { TopBunting } from "./TopBunting";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 interface StarParticle {
   x: number;
@@ -49,6 +50,8 @@ interface DuckParticle {
 }
 
 export function CinematicBackgroundEngine() {
+  const { config } = useSiteConfig();
+  const { effects } = config;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mouseRef = useRef({ targetX: 0, targetY: 0, currentX: 0, currentY: 0 });
 
@@ -431,7 +434,7 @@ export function CinematicBackgroundEngine() {
       />
 
       {/* Top Fabric Birthday Bunting Banner */}
-      <TopBunting />
+      {effects.birthdayFlags && <TopBunting />}
     </div>
   );
 }

@@ -14,11 +14,16 @@ import { CinematicDuckIntro } from "@/components/intro/CinematicDuckIntro";
 import { CinematicBackgroundEngine } from "@/components/ui/CinematicBackgroundEngine";
 import { MusicController } from "@/components/ui/MusicController";
 import { useAudio } from "@/context/AudioContext";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 export default function HomePage() {
-  const { days, hours, minutes, seconds, isUnlocked, isHydrated } = useCountdown(
-    RELEASE_CONFIG.releaseDate,
-    RELEASE_CONFIG.developmentMode
+  const { config } = useSiteConfig();
+  const targetDateIso = `${config.countdown.targetDate}T${config.countdown.targetTime}:00Z`;
+  const devMode = config.countdown.skipCountdown || config.countdown.developmentMode;
+
+  const { days, hours, minutes, seconds, isUnlocked } = useCountdown(
+    targetDateIso,
+    devMode
   );
   const [showMemoryReveal, setShowMemoryReveal] = useState(false);
   const [experienceKey, setExperienceKey] = useState(0);

@@ -2,12 +2,16 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 interface HeroSceneProps {
   onOpenGift?: () => void;
 }
 
 export function HeroScene({ onOpenGift }: HeroSceneProps) {
+  const { config } = useSiteConfig();
+  const { general, hero } = config;
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -87,7 +91,7 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
           variants={itemVariants}
           className="font-sans text-xs sm:text-sm tracking-[0.4em] uppercase text-zinc-500 mb-8 font-medium"
         >
-          21 August
+          {config.countdown.targetDate}
         </motion.span>
 
         {/* Calligraphy Handwritten Title */}
@@ -95,7 +99,7 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
           variants={itemVariants}
           className="font-calligraphy text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-zinc-900 tracking-normal leading-[1.05] mb-8 text-rose-950/90 drop-shadow-sm"
         >
-          Happy Birthday <span className="text-rose-500 inline-block font-sans text-4xl sm:text-5xl md:text-6xl align-middle ml-1">❤️</span>
+          {general.heroTitle || hero.mainHeading} <span className="text-rose-500 inline-block font-sans text-4xl sm:text-5xl md:text-6xl align-middle ml-1">❤️</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -103,7 +107,7 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
           variants={itemVariants}
           className="font-serif text-xl sm:text-2xl md:text-3xl font-normal italic text-zinc-700 tracking-wide mb-10 max-w-xl"
         >
-          For the girl who changed my world.
+          {general.heroSubtitle || hero.subtitle}
         </motion.h2>
 
         {/* Short Paragraph */}
@@ -121,7 +125,7 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
             className="group relative inline-flex items-center justify-center px-10 py-4 sm:py-4.5 rounded-full bg-white/85 backdrop-blur-md border border-rose-200/90 text-zinc-800 font-sans text-sm sm:text-base font-medium tracking-wide shadow-[0_10px_35px_rgba(244,114,182,0.18)] transition-all duration-500 hover:bg-white hover:border-rose-300 hover:shadow-[0_15px_40px_rgba(244,114,182,0.28)] hover:scale-[1.03] active:scale-[0.97]"
           >
             <span className="relative z-10 flex items-center gap-2.5">
-              Open My Gift <span className="text-rose-500">❤️</span>
+              {hero.buttonText || "Open My Gift ❤️"}
             </span>
             <span className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-100/60 via-pink-50/40 to-rose-100/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
           </button>

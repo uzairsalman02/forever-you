@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 interface CinematicDuckIntroProps {
   onComplete: () => void;
@@ -18,6 +19,8 @@ interface FloatingHeart {
 }
 
 export function CinematicDuckIntro({ onComplete }: CinematicDuckIntroProps) {
+  const { config } = useSiteConfig();
+  const recipientName = config.general.recipientName || "Farwa";
   // Scene stages:
   // 1: Black screen (0.0s - 0.8s)
   // 2: Walking in from left to center (0.8s - 3.2s)
@@ -129,7 +132,7 @@ export function CinematicDuckIntro({ onComplete }: CinematicDuckIntroProps) {
                 </motion.span>
 
                 <h1 className="font-calligraphy text-5xl sm:text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-rose-100 via-pink-200 to-rose-100 drop-shadow-[0_0_25px_rgba(244,114,182,0.6)] leading-tight tracking-wide">
-                  ✨ For Farwa ✨
+                  ✨ For {recipientName} ✨
                 </h1>
 
                 <p className="font-serif italic text-sm sm:text-lg text-rose-200/90 mt-3 tracking-wide">

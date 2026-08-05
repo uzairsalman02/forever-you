@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { VAULT_MEMORIES } from "@/content/vaultMemories";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 import { PolaroidCard } from "./PolaroidCard";
 
 interface MemoryVaultSceneProps {
@@ -12,7 +12,21 @@ interface MemoryVaultSceneProps {
 export function MemoryVaultScene({
   onTransitionComplete,
 }: MemoryVaultSceneProps) {
+  const { config } = useSiteConfig();
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Map gallery items from CMS to VaultMemory format
+  const memoriesList = config.gallery.map((g, idx) => ({
+    id: g.id,
+    imageUrl: g.imageUrl,
+    rotation: g.rotation || `${((idx * 5) % 25) - 12}deg`,
+    hoverRotation: "0deg",
+    aspectRatio: idx % 3 === 0 ? "aspect-square" : idx % 2 === 0 ? "aspect-[3/4]" : "aspect-[4/5]",
+    widthClass: idx % 4 === 0 ? "w-36 sm:w-44 md:w-52 lg:w-60" : "w-28 sm:w-36 md:w-44 lg:w-52",
+    zIndex: g.isFavorite ? 45 : (idx % 35) + 5,
+    marginOffset: idx % 2 === 0 ? "-mt-6 sm:-mt-10 -ml-4 sm:-ml-8" : "mt-4 sm:mt-8 -mr-6 sm:-mr-12",
+    isFavorite: g.isFavorite,
+  }));
 
   const handleButtonClick = () => {
     if (isTransitioning) return;
@@ -92,7 +106,7 @@ export function MemoryVaultScene({
         viewport={{ once: true, amount: 0.02 }}
         className="relative z-10 w-full max-w-[1450px] mx-auto flex flex-wrap items-center justify-center py-4 px-1 sm:px-4 gap-y-4 sm:gap-y-6 md:gap-y-8"
       >
-        {VAULT_MEMORIES.map((memory, index) => (
+        {memoriesList.map((memory, index) => (
           <PolaroidCard
             key={memory.id}
             memory={memory}
