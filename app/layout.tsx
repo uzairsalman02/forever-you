@@ -40,7 +40,7 @@ export default function RootLayout({
       lang="en"
       className={`${cormorantGaramond.variable} ${plusJakartaSans.variable} ${greatVibes.variable}`}
     >
-      <body className="bg-[#111111] text-foreground antialiased min-h-screen relative overflow-x-hidden">
+      <body className="bg-background text-foreground antialiased min-h-screen relative overflow-x-hidden">
         <AudioProvider>{children}</AudioProvider>
       </body>
     </html>

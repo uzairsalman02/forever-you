@@ -30,12 +30,6 @@ export default function HomePage() {
     setHasPlayedIntro(true);
   };
 
-  // Prevent flash before client hydration
-  if (!isHydrated) {
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-transparent" />
-    );
-  }
 
   // When countdown is active and not unlocked, display ONLY Scene 1
   if (!isUnlocked) {
