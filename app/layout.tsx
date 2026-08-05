@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { cormorantGaramond, plusJakartaSans, greatVibes } from "./fonts";
 import { SITE_CONFIG } from "@/utils/constants";
 import { AudioProvider } from "@/context/AudioContext";
@@ -7,6 +7,26 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: SITE_CONFIG.title,
   description: SITE_CONFIG.description,
+  manifest: "/manifest.json",
+  openGraph: {
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
+    type: "website",
+    locale: "en_US",
+    siteName: "Forever You",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#fff5f7",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
