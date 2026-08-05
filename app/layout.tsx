@@ -40,10 +40,7 @@ export default function RootLayout({
       lang="en"
       className={`${cormorantGaramond.variable} ${plusJakartaSans.variable} ${greatVibes.variable}`}
     >
-      <body className="bg-background text-foreground antialiased min-h-screen relative overflow-x-hidden">
-        {/* Persistent 6-Layer Cinematic Background Engine (Never Unmounts) */}
-        <CinematicBackgroundEngine />
-
+      <body className="bg-[#111111] text-foreground antialiased min-h-screen relative overflow-x-hidden">
         <AudioProvider>{children}</AudioProvider>
       </body>
     </html>

@@ -29,12 +29,12 @@ export function CountdownDisplay({
       {units.map((unit) => (
         <div
           key={unit.label}
-          className="flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl bg-white/40 backdrop-blur-md border border-white/60 shadow-[0_4px_24px_rgba(244,114,182,0.06)] transition-all duration-300 hover:bg-white/50"
+          className="flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-500 hover:bg-white/[0.07] hover:border-white/[0.15]"
         >
-          <span className="font-serif text-4xl sm:text-5xl md:text-6xl font-light text-zinc-900 tracking-tight tabular-nums">
+          <span className="font-serif text-4xl sm:text-5xl md:text-6xl font-light text-amber-100/90 tracking-tight tabular-nums drop-shadow-[0_2px_12px_rgba(253,230,138,0.25)]">
             {formatTwoDigits(unit.value)}
           </span>
-          <span className="mt-2 font-sans text-[10px] sm:text-xs font-semibold tracking-[0.25em] text-zinc-400 uppercase">
+          <span className="mt-2.5 font-sans text-[10px] sm:text-xs font-medium tracking-[0.3em] text-zinc-400 uppercase">
             {unit.label}
           </span>
         </div>

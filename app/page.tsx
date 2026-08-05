@@ -11,6 +11,7 @@ import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 import { LetterScene } from "@/components/letter/LetterScene";
 import { CelebrationScene } from "@/components/celebration/CelebrationScene";
 import { CinematicDuckIntro } from "@/components/intro/CinematicDuckIntro";
+import { CinematicBackgroundEngine } from "@/components/ui/CinematicBackgroundEngine";
 import { MusicController } from "@/components/ui/MusicController";
 import { useAudio } from "@/context/AudioContext";
 
@@ -100,6 +101,9 @@ export default function HomePage() {
 
   return (
     <div className="w-full min-h-screen relative bg-transparent overflow-x-hidden">
+      {/* 6-Layer Cinematic Background Engine (Living Cloud, Particles, Bunting) */}
+      <CinematicBackgroundEngine />
+
       {/* One-Time Cinematic Baby Duck Opening Sequence */}
       {!hasPlayedIntro && (
         <CinematicDuckIntro onComplete={handleIntroComplete} />
