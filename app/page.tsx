@@ -25,21 +25,8 @@ export default function HomePage() {
   const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
   const { stopAllAudio } = useAudio();
 
-  // Check if intro was already played in current browser session
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const played = sessionStorage.getItem("forever_you_duck_intro_played");
-      if (played === "true") {
-        setHasPlayedIntro(true);
-      }
-    }
-  }, []);
-
   const handleIntroComplete = () => {
     setHasPlayedIntro(true);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("forever_you_duck_intro_played", "true");
-    }
   };
 
   // Prevent flash before client hydration
@@ -99,6 +86,7 @@ export default function HomePage() {
       // Step 3: Increment experience key to unmount and re-mount all scene components with fresh initial state
       setExperienceKey((prev) => prev + 1);
       setShowMemoryReveal(false);
+      setHasPlayedIntro(false);
 
       // Step 4: Instantly scroll to top while screen is covered by overlay
       window.scrollTo({ top: 0, behavior: "instant" });
