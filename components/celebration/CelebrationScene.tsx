@@ -5,12 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { LuxuryCake } from "@/components/cake/LuxuryCake";
 import { CelebrationOverlay } from "./CelebrationOverlay";
-import {
-  playHappyBirthdayMusicBox,
-  playCandleBlowSound,
-  playCakeCutSound,
-  playCelebrationSound,
-} from "@/utils/audio";
+import { useAudio } from "@/context/AudioContext";
+import { playHappyBirthdayMusicBox } from "@/utils/audio";
 
 interface CelebrationSceneProps {
   onReplayClick?: () => void;
@@ -29,6 +25,8 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
 
+  const { playSound } = useAudio();
+
   // Soft Transition Screen timer (2.5 seconds)
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -42,7 +40,7 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
     if (isBlowing || hasBlown) return;
     setIsBlowing(true);
     setIsDimmed(true);
-    playCandleBlowSound();
+    playSound("candleBlow");
 
     setTimeout(() => {
       setIsLit(false);
@@ -61,8 +59,8 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
     if (isCut) return;
     setIsCut(true);
     setIsCelebrating(true);
-    playCakeCutSound();
-    playCelebrationSound();
+    playSound("cakeCut");
+    playSound("celebration");
 
     // Play Happy Birthday Web Audio music box melody
     playHappyBirthdayMusicBox();
@@ -71,6 +69,13 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
     setTimeout(() => {
       setShowFinalMessage(true);
     }, 1800);
+  };
+
+  const handleReplay = () => {
+    playSound("restart");
+    if (onReplayClick) {
+      onReplayClick();
+    }
   };
 
   return (
@@ -193,7 +198,7 @@ export function CelebrationScene({ onReplayClick }: CelebrationSceneProps) {
 
               {/* Read It Again Action Button */}
               <button
-                onClick={onReplayClick}
+                onClick={handleReplay}
                 className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white border border-rose-200 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-sm transition-all duration-300 hover:border-rose-300 hover:shadow-md hover:scale-[1.03] active:scale-[0.97]"
               >
                 <span className="relative z-10 flex items-center gap-2">

@@ -18,7 +18,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 50-Second Dynamic Luxury Animated Gradient */
+/* 25-Second Dynamic Luxury Animated Gradient (20-30s cycle) */
 @keyframes dynamicGradient {
   0% {
     background-position: 0% 50%;
@@ -48,7 +48,7 @@ body {
     #fff5f7
   );
   background-size: 400% 400%;
-  animation: dynamicGradient 50s ease-in-out infinite;
+  animation: dynamicGradient 25s ease-in-out infinite;
 }
 
 /* Soft Ambient Drifting Light Orbs */

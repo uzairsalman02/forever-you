@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cormorantGaramond, plusJakartaSans, greatVibes } from "./fonts";
 import { SITE_CONFIG } from "@/utils/constants";
+import { AudioProvider } from "@/context/AudioContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${plusJakartaSans.variable} ${greatVibes.variable}`}
     >
       <body className="bg-background text-foreground antialiased min-h-screen">
-        {children}
+        <AudioProvider>{children}</AudioProvider>
       </body>
     </html>
   );

@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import { WaxSeal } from "./WaxSeal";
 import { LetterPaper } from "./LetterPaper";
-import { playEnvelopeSound } from "@/utils/audio";
 import { LETTER_CONFIG } from "@/content/letterConfig";
+import { useAudio } from "@/context/AudioContext";
 
 interface LetterSceneProps {
   onSurpriseClick?: () => void;
@@ -15,11 +15,13 @@ interface LetterSceneProps {
 export function LetterScene({ onSurpriseClick }: LetterSceneProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
+  const { playSound } = useAudio();
 
   const handleOpenLetter = () => {
     if (isOpen || isOpening) return;
     setIsOpening(true);
-    playEnvelopeSound();
+    playSound("waxSeal");
+    playSound("envelope");
 
     // Sequence: Wax seal breaks -> flap opens -> letter slides up
     setTimeout(() => {
@@ -65,7 +67,6 @@ export function LetterScene({ onSurpriseClick }: LetterSceneProps) {
               transition={{ duration: 1.0, ease: "easeInOut" }}
               className="relative w-full max-w-[580px] bg-[#F7F2E6] rounded-2xl shadow-[0_20px_50px_rgba(180,140,110,0.18)] border border-[#EFE7D8] p-8 sm:p-12 flex flex-col items-center text-center overflow-hidden my-6"
             >
-              {/* Envelope Flap Top Triangle Decorative Line */}
               <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#EFE7D8]/40 to-transparent pointer-events-none" />
 
               <div className="relative z-10 flex flex-col items-center my-8">
