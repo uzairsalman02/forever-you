@@ -308,24 +308,118 @@ export function CinematicBackgroundEngine() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-      {/* LAYER 1: 50s Animated Living Aurora Gradient */}
-      <div className="fixed inset-0 animate-aurora-gradient -z-40" />
+      {/* LAYER 1: 14s Dynamic Reference Shifting Gradient (From Reference HTML) */}
+      <div className="fixed inset-0 animate-reference-gradient -z-40" />
 
-      {/* LAYER 2: 8 Ambient Blurred Glowing Blobs */}
+      {/* LAYER 2: 10 GIANT LIVING COLOR BLOBS (Soft Romantic Luxury Palette) */}
+
+      {/* Blob 1: Blush Pink Cloud */}
       <div
-        className="fixed top-[-10%] left-[-5%] w-[32rem] h-[32rem] rounded-full bg-rose-200/35 blur-[120px] pointer-events-none animate-blob-1 -z-30"
+        className="fixed top-[-15%] left-[-15%] w-[70vw] h-[70vw] max-w-[1000px] max-h-[1000px] rounded-full blur-[120px] pointer-events-none animate-blob-living-1 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(244, 114, 182, 0.75) 0%, rgba(249, 168, 212, 0.4) 45%, rgba(244, 114, 182, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
         aria-hidden="true"
       />
+
+      {/* Blob 2: Soft Peach Cloud */}
       <div
-        className="fixed bottom-[-10%] right-[-5%] w-[36rem] h-[36rem] rounded-full bg-purple-200/30 blur-[130px] pointer-events-none animate-blob-2 -z-30"
+        className="fixed top-[-10%] right-[-15%] w-[75vw] h-[75vw] max-w-[1100px] max-h-[1100px] rounded-full blur-[130px] pointer-events-none animate-blob-living-2 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(254, 215, 170, 0.85) 0%, rgba(253, 186, 116, 0.45) 45%, rgba(254, 215, 170, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
         aria-hidden="true"
       />
+
+      {/* Blob 3: Lavender Mist */}
       <div
-        className="fixed top-[40%] right-[10%] w-[28rem] h-[28rem] rounded-full bg-[#fdf6e2]/40 blur-[110px] pointer-events-none animate-blob-3 -z-30"
+        className="fixed top-[25%] right-[-20%] w-[65vw] h-[65vw] max-w-[950px] max-h-[950px] rounded-full blur-[120px] pointer-events-none animate-blob-living-3 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(216, 180, 254, 0.75) 0%, rgba(233, 213, 255, 0.4) 45%, rgba(216, 180, 254, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
         aria-hidden="true"
       />
+
+      {/* Blob 4: Rose Pink Bloom */}
       <div
-        className="fixed bottom-[20%] left-[5%] w-[30rem] h-[30rem] rounded-full bg-pink-200/35 blur-[120px] pointer-events-none animate-blob-4 -z-30"
+        className="fixed bottom-[-20%] left-[-15%] w-[70vw] h-[70vw] max-w-[1000px] max-h-[1000px] rounded-full blur-[125px] pointer-events-none animate-blob-living-4 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(251, 113, 133, 0.70) 0%, rgba(253, 164, 175, 0.4) 45%, rgba(251, 113, 133, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Blob 5: Champagne Sunbeam */}
+      <div
+        className="fixed top-[20%] left-[15%] w-[60vw] h-[60vw] max-w-[900px] max-h-[900px] rounded-full blur-[110px] pointer-events-none animate-blob-living-5 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(254, 243, 199, 0.90) 0%, rgba(253, 230, 138, 0.5) 45%, rgba(254, 243, 199, 0) 70%)",
+          mixBlendMode: "soft-light",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Blob 6: Light Coral Warmth */}
+      <div
+        className="fixed bottom-[-15%] right-[-15%] w-[68vw] h-[68vw] max-w-[980px] max-h-[980px] rounded-full blur-[135px] pointer-events-none animate-blob-living-6 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(253, 164, 175, 0.75) 0%, rgba(254, 205, 211, 0.4) 45%, rgba(253, 164, 175, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Blob 7: Warm White Radiance */}
+      <div
+        className="fixed top-[-15%] left-[30%] w-[55vw] h-[55vw] max-w-[850px] max-h-[850px] rounded-full blur-[100px] pointer-events-none animate-blob-living-7 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(255, 253, 245, 0.95) 0%, rgba(255, 255, 240, 0.5) 45%, rgba(255, 253, 245, 0) 70%)",
+          mixBlendMode: "overlay",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Blob 8: Cream & Apricot Glow */}
+      <div
+        className="fixed top-[45%] left-[-18%] w-[62vw] h-[62vw] max-w-[920px] max-h-[920px] rounded-full blur-[115px] pointer-events-none animate-blob-living-8 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(255, 237, 213, 0.85) 0%, rgba(254, 215, 170, 0.45) 45%, rgba(255, 237, 213, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Blob 9: Romantic Violet Lavender */}
+      <div
+        className="fixed bottom-[-25%] left-[20%] w-[72vw] h-[72vw] max-w-[1050px] max-h-[1050px] rounded-full blur-[140px] pointer-events-none animate-blob-living-9 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(243, 232, 255, 0.85) 0%, rgba(233, 213, 255, 0.45) 45%, rgba(243, 232, 255, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Blob 10: Soft Sunset Pink */}
+      <div
+        className="fixed top-[12%] right-[12%] w-[58vw] h-[58vw] max-w-[880px] max-h-[880px] rounded-full blur-[120px] pointer-events-none animate-blob-living-10 -z-35"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(254, 205, 211, 0.80) 0%, rgba(251, 113, 133, 0.40) 45%, rgba(254, 205, 211, 0) 70%)",
+          mixBlendMode: "multiply",
+        }}
         aria-hidden="true"
       />
 
@@ -341,3 +435,4 @@ export function CinematicBackgroundEngine() {
     </div>
   );
 }
+
