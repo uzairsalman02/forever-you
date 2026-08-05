@@ -32,13 +32,6 @@ export default function DevDashboardPage() {
     stopAllAudio();
   }, [stopAllAudio]);
 
-  // Security check: Redirect to homepage if development mode is disabled
-  useEffect(() => {
-    if (config.countdown && !config.countdown.developmentMode) {
-      router.push("/");
-    }
-  }, [config.countdown, router]);
-
   return (
     <div className="min-h-screen w-full bg-slate-50 text-slate-800 selection:bg-rose-500 selection:text-white">
       {/* Background Subtle Light Ambient Glow */}
