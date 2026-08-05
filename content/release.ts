@@ -10,5 +10,5 @@ export const RELEASE_CONFIG: ReleaseConfig = {
   // Preferred timezone for display reference
   timezone: "UTC",
   // When true, bypasses countdown and shows the website
-  developmentMode: false,
+  developmentMode: true,
 };
