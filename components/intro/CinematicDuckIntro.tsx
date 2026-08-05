@@ -47,14 +47,14 @@ export function CinematicDuckIntro({ onComplete }: CinematicDuckIntroProps) {
     // Stage 4 -> 5: Farwa Name Reveal at 5.8s
     const timer4 = setTimeout(() => setSceneStage(5), 5800);
 
-    // Stage 5 -> 6: Duck Exit to right at 8.0s
-    const timer5 = setTimeout(() => setSceneStage(6), 8000);
+    // Stage 5 -> 6: Duck Exit to right at 10.0s (+2 extra seconds hold on screen)
+    const timer5 = setTimeout(() => setSceneStage(6), 10000);
 
-    // Stage 6 -> 7: Complete at 9.5s
+    // Stage 6 -> 7: Complete at 11.5s
     const timer6 = setTimeout(() => {
       setSceneStage(7);
       onComplete();
-    }, 9500);
+    }, 11500);
 
     return () => {
       clearTimeout(timer1);
@@ -118,7 +118,7 @@ export function CinematicDuckIntro({ onComplete }: CinematicDuckIntroProps) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -15, scale: 0.95 }}
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute top-[22%] z-20 flex flex-col items-center text-center px-4"
+                className="absolute top-[16vh] sm:top-[18vh] z-20 flex flex-col items-center text-center px-4"
               >
                 <motion.span
                   animate={{ opacity: [0.6, 1, 0.6], scale: [0.95, 1.05, 0.95] }}
@@ -128,11 +128,11 @@ export function CinematicDuckIntro({ onComplete }: CinematicDuckIntroProps) {
                   A Surprise Experience
                 </motion.span>
 
-                <h1 className="font-calligraphy text-6xl sm:text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-rose-100 via-pink-200 to-rose-100 drop-shadow-[0_0_25px_rgba(244,114,182,0.6)] leading-tight tracking-wide">
+                <h1 className="font-calligraphy text-5xl sm:text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-rose-100 via-pink-200 to-rose-100 drop-shadow-[0_0_25px_rgba(244,114,182,0.6)] leading-tight tracking-wide">
                   ✨ For Farwa ✨
                 </h1>
 
-                <p className="font-serif italic text-base sm:text-lg text-rose-200/90 mt-3 tracking-wide">
+                <p className="font-serif italic text-sm sm:text-lg text-rose-200/90 mt-3 tracking-wide">
                   This magical moment is all for you...
                 </p>
               </motion.div>
@@ -140,7 +140,7 @@ export function CinematicDuckIntro({ onComplete }: CinematicDuckIntroProps) {
           </AnimatePresence>
 
           {/* ==========================================
-              DUCK CONTAINER & ANIMATION
+              DUCK CONTAINER & ANIMATION (POSITIONED LOWER FOR ZERO OVERLAP)
               ========================================== */}
           <motion.div
             initial={{ x: "-60vw" }}
@@ -158,7 +158,7 @@ export function CinematicDuckIntro({ onComplete }: CinematicDuckIntroProps) {
                 ? { duration: 1.6, ease: [0.4, 0, 0.2, 1] }
                 : { duration: 0 }
             }
-            className="relative flex flex-col items-center justify-center z-10"
+            className="absolute bottom-[14vh] sm:bottom-[18vh] left-1/2 -translate-x-1/2 flex flex-col items-center justify-center z-10"
             style={{ transformOrigin: "center" }}
           >
             {/* SCENE 3: "Quack!" Speech Bubble */}
