@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { VAULT_MEMORIES } from "@/content/vaultMemories";
+import { DETAILED_MEMORIES } from "@/content/detailedMemories";
 import { LETTER_CONFIG } from "@/content/letterConfig";
 import { AUDIO_CONFIG } from "@/content/audioConfig";
 import { RELEASE_CONFIG } from "@/content/release";
@@ -33,6 +34,13 @@ export interface GalleryItem {
   caption: string;
   isFavorite: boolean;
   rotation: string;
+}
+
+export interface DetailedMemoryItem {
+  id: string;
+  image: string;
+  title: string;
+  description: string;
 }
 
 export interface LetterParagraphItem {
@@ -111,6 +119,7 @@ export interface FullSiteConfig {
   general: GeneralSettings;
   countdown: CountdownSettings;
   gallery: GalleryItem[];
+  detailedMemories: DetailedMemoryItem[];
   sequence: string[];
   letter: LetterSettings;
   music: MusicSettings;
@@ -143,6 +152,12 @@ export const DEFAULT_SITE_CONFIG: FullSiteConfig = {
     developmentMode: RELEASE_CONFIG.developmentMode,
     skipCountdown: false,
   },
+  detailedMemories: DETAILED_MEMORIES.map((m) => ({
+    id: m.id,
+    image: m.image,
+    title: m.title,
+    description: m.description,
+  })),
   gallery: VAULT_MEMORIES.map((m, idx) => ({
     id: m.id,
     imageUrl: m.imageUrl,

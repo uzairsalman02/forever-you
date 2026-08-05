@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, TouchEvent } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { DETAILED_MEMORIES } from "@/content/detailedMemories";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 interface MemoryRevealSceneProps {
   onFinishMemories?: () => void;
@@ -12,12 +12,17 @@ interface MemoryRevealSceneProps {
 export function MemoryRevealScene({
   onFinishMemories,
 }: MemoryRevealSceneProps) {
+  const { config } = useSiteConfig();
+  const memoriesList = config.detailedMemories && config.detailedMemories.length > 0
+    ? config.detailedMemories
+    : [];
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-  const totalMemories = DETAILED_MEMORIES.length;
-  const currentMemory = DETAILED_MEMORIES[currentIndex];
+  const totalMemories = memoriesList.length;
+  const currentMemory = memoriesList[currentIndex] || memoriesList[0];
 
   const handleNext = useCallback(() => {
     setDirection(1);
@@ -57,13 +62,14 @@ export function MemoryRevealScene({
 
   // Preload next image in background for zero load latency
   useEffect(() => {
+    if (totalMemories === 0) return;
     const nextIndex = (currentIndex + 1) % totalMemories;
-    const nextImageUrl = DETAILED_MEMORIES[nextIndex].image;
+    const nextImageUrl = memoriesList[nextIndex]?.image;
     if (typeof window !== "undefined" && nextImageUrl) {
       const img = new window.Image();
       img.src = nextImageUrl;
     }
-  }, [currentIndex, totalMemories]);
+  }, [currentIndex, totalMemories, memoriesList]);
 
   // Mobile Touch Swipe Handling
   const handleTouchStart = (e: TouchEvent) => {

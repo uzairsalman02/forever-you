@@ -25,7 +25,7 @@ const TABS: { id: DevTab; label: string; icon: string }[] = [
   { id: "general", label: "1. General Settings", icon: "⚙️" },
   { id: "countdown", label: "2. Countdown Settings", icon: "⏳" },
   { id: "gallery", label: "3. Gallery Manager", icon: "🖼️" },
-  { id: "sequence", label: "4. Memory Sequence", icon: "🔀" },
+  { id: "sequence", label: "4. Zoom Memories", icon: "📸" },
   { id: "letter", label: "5. Letter Editor", icon: "💌" },
   { id: "music", label: "6. Music Settings", icon: "🎵" },
   { id: "duck", label: "7. Duck Intro", icon: "🐥" },
@@ -38,28 +38,52 @@ const TABS: { id: DevTab; label: string; icon: string }[] = [
 
 export function DevSidebar({ activeTab, setActiveTab }: DevSidebarProps) {
   return (
-    <aside className="w-64 min-h-[calc(100vh-4rem)] p-4 bg-white/10 backdrop-blur-2xl border-r border-white/20 flex flex-col gap-1 select-none">
-      <div className="px-3 py-2 text-[11px] font-semibold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
-        Navigation Sections
-      </div>
+    <>
+      {/* Desktop Vertical Sidebar */}
+      <aside className="hidden lg:flex w-64 min-h-[calc(100vh-4rem)] p-4 bg-white/60 backdrop-blur-2xl border-r border-slate-200/80 flex-col gap-1 select-none shrink-0">
+        <div className="px-3 py-2 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+          Navigation Sections
+        </div>
 
-      {TABS.map((tab) => {
-        const isActive = activeTab === tab.id;
-        return (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-left ${
-              isActive
-                ? "bg-gradient-to-r from-rose-500/90 to-pink-500/90 text-white font-semibold shadow-md shadow-rose-500/20"
-                : "text-slate-700 dark:text-slate-300 hover:bg-white/20 dark:hover:bg-white/10"
-            }`}
-          >
-            <span className="text-base">{tab.icon}</span>
-            <span className="truncate">{tab.label}</span>
-          </button>
-        );
-      })}
-    </aside>
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-left ${
+                isActive
+                  ? "bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold shadow-md shadow-rose-500/20"
+                  : "text-slate-700 hover:bg-slate-100/80"
+              }`}
+            >
+              <span className="text-base">{tab.icon}</span>
+              <span className="truncate">{tab.label}</span>
+            </button>
+          );
+        })}
+      </aside>
+
+      {/* Mobile & Tablet Horizontal Scroll Tab Navigation */}
+      <div className="lg:hidden w-full bg-white/80 backdrop-blur-xl border-b border-slate-200/80 p-2 overflow-x-auto flex items-center gap-2 select-none shrink-0 scrollbar-none">
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                isActive
+                  ? "bg-rose-500 text-white font-semibold shadow-sm"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+              }`}
+            >
+              <span>{tab.icon}</span>
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </>
   );
 }

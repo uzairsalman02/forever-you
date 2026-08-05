@@ -128,7 +128,7 @@ export function MemoryVaultScene({
           className="group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/90 backdrop-blur-md border border-rose-200/80 text-zinc-800 font-sans text-sm font-medium tracking-wide shadow-[0_4px_20px_rgba(244,114,182,0.12)] transition-all duration-500 hover:bg-white hover:border-rose-300 hover:shadow-[0_8px_30px_rgba(244,114,182,0.25)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="relative z-10 flex items-center gap-2">
-            {isTransitioning ? "Entering Memory..." : "Relive Our Memories"} <span className="text-rose-500">❤️</span>
+            {isTransitioning ? "Entering Memory..." : "Relive Some Memories"} <span className="text-rose-500">❤️</span>
           </span>
           <span className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-100/50 to-pink-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
         </button>
