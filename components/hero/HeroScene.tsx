@@ -11,6 +11,7 @@ interface HeroSceneProps {
 export function HeroScene({ onOpenGift }: HeroSceneProps) {
   const { config } = useSiteConfig();
   const { general, hero } = config;
+  const [isDissolving, setIsDissolving] = React.useState(false);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -36,16 +37,14 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
   };
 
   const handleButtonClick = () => {
-    if (onOpenGift) {
-      onOpenGift();
-    } else {
-      const targetSection =
-        document.getElementById("memory-vault") ||
-        document.getElementById("next-section");
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: "smooth" });
+    if (isDissolving) return;
+    setIsDissolving(true);
+
+    setTimeout(() => {
+      if (onOpenGift) {
+        onOpenGift();
       }
-    }
+    }, 700);
   };
 
   return (
@@ -53,6 +52,15 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
       id="hero-section"
       className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none overflow-hidden bg-transparent"
     >
+      {/* Soft Dissolve Overlay */}
+      {isDissolving && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+          className="fixed inset-0 z-50 bg-[#08080c] pointer-events-none"
+        />
+      )}
 
       {/* Subtle Luxury Sparkles floating in background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">

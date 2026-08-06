@@ -43,6 +43,13 @@ export interface DetailedMemoryItem {
   description: string;
 }
 
+export interface SubtitleItem {
+  id: string;
+  text: string;
+  holdDuration?: number;
+  pauseAfter?: number;
+}
+
 export interface LetterParagraphItem {
   id: string;
   text: string;
@@ -115,11 +122,73 @@ export interface FinalMessageSettings {
   buttonText: string;
 }
 
+export const DEFAULT_SUBTITLES: SubtitleItem[] = [
+  { id: "sub-1", text: "Kuch kahaniyan...", holdDuration: 2.5 },
+  { id: "sub-2", text: "Waqt ke saath purani nahi hotin...", holdDuration: 2.8 },
+  { id: "sub-3", text: "Wo waqt ke saath aur gehri ho jati hain...", holdDuration: 3.2 },
+  { id: "sub-4", text: "Zindagi mein bohot kuch badla...", holdDuration: 2.8 },
+  { id: "sub-5", text: "Lekin ek cheez kabhi nahi badli...", holdDuration: 2.8 },
+  { id: "sub-6", text: "Meri tumhare liye mohabbat...", holdDuration: 3.0 },
+  { id: "sub-7", text: "2013 mein jab hum mile the...", holdDuration: 2.8 },
+  { id: "sub-8", text: "Tab kahan pata tha...", holdDuration: 2.5 },
+  { id: "sub-9", text: "Ke ek anjaan shuruat...", holdDuration: 2.5 },
+  { id: "sub-10", text: "Kisi din meri zindagi ki...", holdDuration: 2.5 },
+  { id: "sub-11", text: "Sab se khoobsurat haqeeqat ban jayegi...", holdDuration: 3.2 },
+  { id: "sub-12", text: "Mujhe aaj bhi yaad hai...", holdDuration: 2.5 },
+  { id: "sub-13", text: "Wo pehli dafa...", holdDuration: 2.2 },
+  { id: "sub-14", text: "Jab meri nazar...", holdDuration: 2.2 },
+  { id: "sub-15", text: "Tumhari un khamosh aankhon par padi thi...", holdDuration: 3.2 },
+  { id: "sub-16", text: "Tumhara...", holdDuration: 2.0 },
+  { id: "sub-17", text: "Balcony se chup kar mujhe dekhna...", holdDuration: 2.8 },
+  { id: "sub-18", text: "Aur woh muskurahat...", holdDuration: 2.5 },
+  { id: "sub-19", text: "Kisi ne kya khoob kaha hai...", holdDuration: 2.5 },
+  { id: "sub-20", text: "\"Teri khamosh aankhon mein jo thehar gaya ek dafa...\"", holdDuration: 3.5 },
+  { id: "sub-21", text: "\"Usay phir zamane ki bheed mein...\"", holdDuration: 3.0 },
+  { id: "sub-22", text: "\"Kahan sukoon milta hai...\"", holdDuration: 3.0 },
+  { id: "sub-23", text: "Phir zindagi ne...", holdDuration: 2.2 },
+  { id: "sub-24", text: "Bohot kuch dikhaya...", holdDuration: 2.5 },
+  { id: "sub-25", text: "Wo sab...", holdDuration: 2.0 },
+  { id: "sub-26", text: "Jo main kabhi nahi chahta tha...", holdDuration: 2.8 },
+  { id: "sub-27", text: "Ek waqt aisa bhi aaya...", holdDuration: 2.5 },
+  { id: "sub-28", text: "Jab mujhe laga...", holdDuration: 2.2 },
+  { id: "sub-29", text: "Jaise sab kuch khatam ho gaya ho...", holdDuration: 3.0 },
+  { id: "sub-30", text: "Main bilkul akela reh gaya tha...", holdDuration: 3.0 },
+  { id: "sub-31", text: "Lekin...", holdDuration: 2.0 },
+  { id: "sub-32", text: "Jo dilon se jude hote hain...", holdDuration: 2.8 },
+  { id: "sub-33", text: "Taqdeerein unhein...", holdDuration: 2.5 },
+  { id: "sub-34", text: "Dobara mila hi deti hain...", holdDuration: 3.0 },
+  { id: "sub-35", text: "Zindagi ne mujhe bohot thakaya...", holdDuration: 2.8 },
+  { id: "sub-36", text: "Magar har andhere mein...", holdDuration: 2.5 },
+  { id: "sub-37", text: "Tum meri roshni bani rahi...", holdDuration: 3.0 },
+  { id: "sub-38", text: "Tum meri bechaini ka sukoon ho...", holdDuration: 3.0 },
+  { id: "sub-39", text: "Mere dard ki dawa ho...", holdDuration: 2.8 },
+  { id: "sub-40", text: "Tumhari ek awaaz...", holdDuration: 2.2 },
+  { id: "sub-41", text: "Mujhe phir se jeena sikha deti hai...", holdDuration: 3.2 },
+  { id: "sub-42", text: "Ye sirf yaadon ki kahani nahi...", holdDuration: 2.8 },
+  { id: "sub-43", text: "Ye us mohabbat ki kahani hai...", holdDuration: 3.0 },
+  { id: "sub-44", text: "Jo har toofan ke baad...", holdDuration: 2.5 },
+  { id: "sub-45", text: "Aur mazboot hoti gayi...", holdDuration: 2.8 },
+  { id: "sub-46", text: "Log...", holdDuration: 2.0 },
+  { id: "sub-47", text: "Waqt ke saath badal jaate hain...", holdDuration: 2.8 },
+  { id: "sub-48", text: "Lekin...", holdDuration: 2.0 },
+  { id: "sub-49", text: "Tum...", holdDuration: 2.0 },
+  { id: "sub-50", text: "Aaj bhi meri pehli mohabbat ho...", holdDuration: 3.2 },
+  { id: "sub-51", text: "Aur meri aakhri manzil bhi...", holdDuration: 3.0 },
+  { id: "sub-52", text: "Mujhe poori zindagi...", holdDuration: 2.5 },
+  { id: "sub-53", text: "Bas tumhara saath chahiye...", holdDuration: 3.2, pauseAfter: 3.0 },
+  { id: "sub-54", text: "Happy Birthday...", holdDuration: 2.5 },
+  { id: "sub-55", text: "Farwa.", holdDuration: 3.0, pauseAfter: 2.0 },
+  { id: "sub-56", text: "Main hamesha tumhara tha...", holdDuration: 2.8 },
+  { id: "sub-57", text: "Aur...", holdDuration: 2.0 },
+  { id: "sub-58", text: "Hamesha tumhara rahunga.", holdDuration: 3.5, pauseAfter: 1.0 },
+];
+
 export interface FullSiteConfig {
   general: GeneralSettings;
   countdown: CountdownSettings;
   gallery: GalleryItem[];
   detailedMemories: DetailedMemoryItem[];
+  subtitles: SubtitleItem[];
   sequence: string[];
   letter: LetterSettings;
   music: MusicSettings;
@@ -158,6 +227,7 @@ export const DEFAULT_SITE_CONFIG: FullSiteConfig = {
     title: m.title,
     description: m.description,
   })),
+  subtitles: DEFAULT_SUBTITLES,
   gallery: VAULT_MEMORIES.map((m, idx) => ({
     id: m.id,
     imageUrl: m.imageUrl,

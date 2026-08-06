@@ -11,6 +11,7 @@ import { MemoryRevealScene } from "@/components/memories/MemoryRevealScene";
 import { LetterScene } from "@/components/letter/LetterScene";
 import { CelebrationScene } from "@/components/celebration/CelebrationScene";
 import { CinematicDuckIntro } from "@/components/intro/CinematicDuckIntro";
+import { CinematicShortFilmIntro } from "@/components/intro/CinematicShortFilmIntro";
 import { CinematicBackgroundEngine } from "@/components/ui/CinematicBackgroundEngine";
 import { MusicController } from "@/components/ui/MusicController";
 import { useAudio } from "@/context/AudioContext";
@@ -29,10 +30,25 @@ export default function HomePage() {
   const [experienceKey, setExperienceKey] = useState(0);
   const [isResettingOverlay, setIsResettingOverlay] = useState(false);
   const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
+  const [isPlayingCinematicShortFilm, setIsPlayingCinematicShortFilm] = useState(false);
   const { stopAllAudio } = useAudio();
 
   const handleIntroComplete = () => {
     setHasPlayedIntro(true);
+  };
+
+  const handleOpenGift = () => {
+    setIsPlayingCinematicShortFilm(true);
+  };
+
+  const handleShortFilmComplete = () => {
+    setIsPlayingCinematicShortFilm(false);
+    setTimeout(() => {
+      const memoryVault = document.getElementById("memory-vault");
+      if (memoryVault) {
+        memoryVault.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   };
 
 
@@ -47,13 +63,6 @@ export default function HomePage() {
       />
     );
   }
-
-  const handleOpenGift = () => {
-    const memoryVault = document.getElementById("memory-vault");
-    if (memoryVault) {
-      memoryVault.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   const handleVaultTransitionComplete = () => {
     setShowMemoryReveal(true);
@@ -106,6 +115,11 @@ export default function HomePage() {
       {/* One-Time Cinematic Baby Duck Opening Sequence */}
       {!hasPlayedIntro && (
         <CinematicDuckIntro onComplete={handleIntroComplete} />
+      )}
+
+      {/* Cinematic Short Film Poetry Sequence on "Open My Gift" */}
+      {isPlayingCinematicShortFilm && (
+        <CinematicShortFilmIntro onComplete={handleShortFilmComplete} />
       )}
 
       {/* Global Experience Reset Soft Pink Overlay */}

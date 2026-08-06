@@ -7,6 +7,7 @@ export type DevTab =
   | "countdown"
   | "gallery"
   | "sequence"
+  | "subtitles"
   | "letter"
   | "music"
   | "duck"
@@ -26,14 +27,15 @@ const TABS: { id: DevTab; label: string; icon: string }[] = [
   { id: "countdown", label: "2. Countdown Settings", icon: "⏳" },
   { id: "gallery", label: "3. Gallery Manager", icon: "🖼️" },
   { id: "sequence", label: "4. Zoom Memories", icon: "📸" },
-  { id: "letter", label: "5. Letter Editor", icon: "💌" },
-  { id: "music", label: "6. Music Settings", icon: "🎵" },
-  { id: "duck", label: "7. Duck Intro", icon: "🐥" },
-  { id: "effects", label: "8. Website Effects", icon: "✨" },
-  { id: "theme", label: "9. Theme Settings", icon: "🎨" },
-  { id: "hero", label: "10. Hero Settings", icon: "👑" },
-  { id: "final", label: "11. Final Message", icon: "💖" },
-  { id: "advanced", label: "12. Advanced / Export", icon: "🚀" },
+  { id: "subtitles", label: "5. Subtitle Editor", icon: "🎬" },
+  { id: "letter", label: "6. Letter Editor", icon: "💌" },
+  { id: "music", label: "7. Music Settings", icon: "🎵" },
+  { id: "duck", label: "8. Duck Intro", icon: "🐥" },
+  { id: "effects", label: "9. Website Effects", icon: "✨" },
+  { id: "theme", label: "10. Theme Settings", icon: "🎨" },
+  { id: "hero", label: "11. Hero Settings", icon: "👑" },
+  { id: "final", label: "12. Final Message", icon: "💖" },
+  { id: "advanced", label: "13. Advanced / Export", icon: "🚀" },
 ];
 
 export function DevSidebar({ activeTab, setActiveTab }: DevSidebarProps) {

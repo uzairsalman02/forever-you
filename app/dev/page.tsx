@@ -12,6 +12,7 @@ import { GeneralSettingsPanel } from "@/components/dev/panels/GeneralSettingsPan
 import { CountdownSettingsPanel } from "@/components/dev/panels/CountdownSettingsPanel";
 import { GalleryManagerPanel } from "@/components/dev/panels/GalleryManagerPanel";
 import { MemorySequencePanel } from "@/components/dev/panels/MemorySequencePanel";
+import { SubtitleEditorPanel } from "@/components/dev/panels/SubtitleEditorPanel";
 import { LetterEditorPanel } from "@/components/dev/panels/LetterEditorPanel";
 import { MusicSettingsPanel } from "@/components/dev/panels/MusicSettingsPanel";
 import { DuckIntroPanel } from "@/components/dev/panels/DuckIntroPanel";
@@ -55,6 +56,7 @@ export default function DevDashboardPage() {
               {activeTab === "countdown" && <CountdownSettingsPanel />}
               {activeTab === "gallery" && <GalleryManagerPanel />}
               {activeTab === "sequence" && <MemorySequencePanel />}
+              {activeTab === "subtitles" && <SubtitleEditorPanel />}
               {activeTab === "letter" && <LetterEditorPanel />}
               {activeTab === "music" && <MusicSettingsPanel />}
               {activeTab === "duck" && <DuckIntroPanel />}
