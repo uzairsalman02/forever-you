@@ -14,6 +14,7 @@ export function MemoryVaultScene({
 }: MemoryVaultSceneProps) {
   const { config } = useSiteConfig();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [activeZoomMemory, setActiveZoomMemory] = useState<any>(null);
 
   const isCollageMode = config.effects.galleryStyle !== "scatter";
 
@@ -124,9 +125,50 @@ export function MemoryVaultScene({
             memory={memory}
             index={index}
             isTransitioning={isTransitioning}
+            onClick={() => setActiveZoomMemory(memory)}
           />
         ))}
       </motion.div>
+
+      {/* Full-Screen Interactive Image Zoom Modal */}
+      <AnimatePresence>
+        {activeZoomMemory && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            onClick={() => setActiveZoomMemory(null)}
+            className="fixed inset-0 z-[200] bg-black/85 backdrop-blur-xl flex flex-col items-center justify-center p-4 sm:p-8 cursor-zoom-out select-none"
+          >
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.85, opacity: 0, y: 20 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl max-h-[85vh] w-full h-full bg-white p-3 sm:p-5 rounded-2xl shadow-2xl flex flex-col items-center justify-center border border-white/40 overflow-hidden cursor-default"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setActiveZoomMemory(null)}
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center text-sm font-bold transition-all hover:scale-110 shadow-lg"
+                title="Close Zoom"
+              >
+                ✕
+              </button>
+
+              <div className="relative w-full h-full min-h-[300px] rounded-xl overflow-hidden bg-slate-900/10">
+                <img
+                  src={activeZoomMemory.imageUrl}
+                  alt={`Memory ${activeZoomMemory.id}`}
+                  className="w-full h-full object-contain select-none"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Bottom Action Button */}
       <motion.div

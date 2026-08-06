@@ -9,12 +9,14 @@ interface PolaroidCardProps {
   memory: VaultMemory;
   index: number;
   isTransitioning?: boolean;
+  onClick?: () => void;
 }
 
 export function PolaroidCard({
   memory,
   index,
   isTransitioning = false,
+  onClick,
 }: PolaroidCardProps) {
   const isFav = memory.isFavorite;
 
@@ -70,11 +72,12 @@ export function PolaroidCard({
     <motion.div
       variants={cardVariants}
       animate={isTransitioning ? "flyingAway" : undefined}
+      onClick={onClick}
       whileHover={
         !isTransitioning
           ? {
               y: -14,
-              scale: 1.12,
+              scale: 1.1,
               rotate: 0,
               zIndex: 90,
               transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
@@ -82,13 +85,13 @@ export function PolaroidCard({
           : undefined
       }
       style={{ zIndex: isFav ? 45 : memory.zIndex }}
-      className={`relative group bg-white p-2.5 sm:p-3.5 pb-8 sm:pb-12 rounded-sm shadow-[0_12px_35px_rgba(0,0,0,0.20)] border border-slate-200/80 transition-shadow duration-300 hover:shadow-[0_30px_60px_rgba(0,0,0,0.35)] select-none will-change-transform ${memory.widthClass} ${memory.marginOffset} ${
+      className={`relative group cursor-pointer bg-white p-2 sm:p-3 pb-3 sm:pb-4 rounded-md shadow-[0_10px_25px_rgba(0,0,0,0.18)] border border-slate-200/80 transition-shadow duration-300 hover:shadow-[0_25px_50px_rgba(0,0,0,0.30)] select-none will-change-transform ${memory.widthClass} ${memory.marginOffset} ${
         isFav ? "ring-2 ring-rose-400" : ""
       }`}
     >
       {/* Photo Frame Container */}
       <div
-        className={`relative w-full ${memory.aspectRatio} overflow-hidden bg-slate-900/10 border border-slate-200/60`}
+        className={`relative w-full ${memory.aspectRatio} overflow-hidden bg-slate-900/10 border border-slate-200/60 rounded-xs`}
       >
         <Image
           src={memory.imageUrl}
