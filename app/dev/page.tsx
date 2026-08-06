@@ -100,7 +100,7 @@ export default function DevDashboardPage() {
                   setInputPassword(e.target.value);
                   setPasswordError(false);
                 }}
-                placeholder="Enter PIN (e.g. 1881)"
+                placeholder="Enter Security PIN"
                 className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-white/20 text-center font-mono text-lg tracking-[0.4em] text-white focus:outline-none focus:ring-2 focus:ring-rose-500/50 placeholder:tracking-normal placeholder:font-sans placeholder:text-xs placeholder:text-slate-400"
               />
 
