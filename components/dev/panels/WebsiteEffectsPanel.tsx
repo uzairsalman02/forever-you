@@ -3,15 +3,17 @@
 import React from "react";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 
+type BooleanEffectKey = keyof Omit<ReturnType<typeof useSiteConfig>["config"]["effects"], "galleryStyle">;
+
 export function WebsiteEffectsPanel() {
   const { config, updateSection } = useSiteConfig();
   const { effects } = config;
 
-  const handleToggle = (field: keyof typeof effects) => {
-    updateSection("effects", { [field]: !effects[field] });
+  const handleToggle = (field: BooleanEffectKey) => {
+    updateSection("effects", { [field]: !Boolean(effects[field]) });
   };
 
-  const EFFECTS_LIST: { id: keyof typeof effects; label: string; desc: string; icon: string }[] = [
+  const EFFECTS_LIST: { id: BooleanEffectKey; label: string; desc: string; icon: string }[] = [
     { id: "birthdayFlags", label: "Festive Birthday Flags", desc: "Top bunting flags string animation", icon: "🚩" },
     { id: "floatingHearts", label: "Floating Hearts Particle Canvas", desc: "Interactive drifting hearts", icon: "💖" },
     { id: "petals", label: "Sakura Petals", desc: "Soft falling sakura flower petals", icon: "🌸" },
@@ -26,13 +28,52 @@ export function WebsiteEffectsPanel() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-          Website Effects & Visual Toggles ✨
-        </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Enable or disable specific visual effects, particles, bunting flags, and animations.
+      {/* Reversible Gallery Style Selector */}
+      <div className="p-6 rounded-2xl bg-white/60 backdrop-blur-xl border border-slate-200 shadow-sm space-y-3">
+        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+          <span>🖼️ Gallery Layout Style (Reversible)</span>
+        </h3>
+        <p className="text-xs text-slate-500">
+          Switch between Dense Overlapping Polaroid Collage and Classic Scattered Grid. You can revert anytime!
         </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => updateSection("effects", { galleryStyle: "polaroid-collage" })}
+            className={`p-4 rounded-xl border text-left transition-all ${
+              effects.galleryStyle !== "scatter"
+                ? "bg-rose-500 text-white border-rose-500 shadow-md font-semibold"
+                : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            <div className="text-sm font-bold flex items-center justify-between">
+              <span>🖼️ Dense Polaroid Collage</span>
+              {effects.galleryStyle !== "scatter" && <span>✓ Active</span>}
+            </div>
+            <p className={`text-[11px] mt-1 ${effects.galleryStyle !== "scatter" ? "text-rose-100" : "text-slate-500"}`}>
+              Overlapping Polaroid photo wall layout with realistic white frames & drop shadows (Matches sample image).
+            </p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => updateSection("effects", { galleryStyle: "scatter" })}
+            className={`p-4 rounded-xl border text-left transition-all ${
+              effects.galleryStyle === "scatter"
+                ? "bg-rose-500 text-white border-rose-500 shadow-md font-semibold"
+                : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            <div className="text-sm font-bold flex items-center justify-between">
+              <span>🔀 Classic Scattered Grid</span>
+              {effects.galleryStyle === "scatter" && <span>✓ Active</span>}
+            </div>
+            <p className={`text-[11px] mt-1 ${effects.galleryStyle === "scatter" ? "text-rose-100" : "text-slate-500"}`}>
+              Clean spaced floating polaroid cards with wide margin gaps.
+            </p>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -59,7 +100,7 @@ export function WebsiteEffectsPanel() {
             </div>
             <input
               type="checkbox"
-              checked={effects[eff.id]}
+              checked={Boolean(effects[eff.id])}
               onChange={() => {}} // handled by parent onClick
               className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
             />

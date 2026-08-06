@@ -15,18 +15,30 @@ export function MemoryVaultScene({
   const { config } = useSiteConfig();
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const isCollageMode = config.effects.galleryStyle !== "scatter";
+
   // Map gallery items from CMS to VaultMemory format
-  const memoriesList = config.gallery.map((g, idx) => ({
-    id: g.id,
-    imageUrl: g.imageUrl,
-    rotation: g.rotation || `${((idx * 5) % 25) - 12}deg`,
-    hoverRotation: "0deg",
-    aspectRatio: idx % 3 === 0 ? "aspect-square" : idx % 2 === 0 ? "aspect-[3/4]" : "aspect-[4/5]",
-    widthClass: idx % 4 === 0 ? "w-36 sm:w-44 md:w-52 lg:w-60" : "w-28 sm:w-36 md:w-44 lg:w-52",
-    zIndex: g.isFavorite ? 45 : (idx % 35) + 5,
-    marginOffset: idx % 2 === 0 ? "-mt-6 sm:-mt-10 -ml-4 sm:-ml-8" : "mt-4 sm:mt-8 -mr-6 sm:-mr-12",
-    isFavorite: g.isFavorite,
-  }));
+  const memoriesList = config.gallery.map((g, idx) => {
+    // Generate organic photo wall rotations matching reference picture (-8deg to +8deg)
+    const rotationAngles = ["-6deg", "4deg", "-8deg", "5deg", "-3deg", "7deg", "-5deg", "3deg", "-7deg", "6deg"];
+    const rot = g.rotation || rotationAngles[idx % rotationAngles.length];
+
+    return {
+      id: g.id,
+      imageUrl: g.imageUrl,
+      rotation: rot,
+      hoverRotation: "0deg",
+      aspectRatio: idx % 3 === 0 ? "aspect-square" : idx % 2 === 0 ? "aspect-[3/4]" : "aspect-[4/5]",
+      widthClass: isCollageMode
+        ? (idx % 4 === 0 ? "w-36 sm:w-48 md:w-56 lg:w-64" : "w-32 sm:w-40 md:w-48 lg:w-56")
+        : (idx % 4 === 0 ? "w-36 sm:w-44 md:w-52 lg:w-60" : "w-28 sm:w-36 md:w-44 lg:w-52"),
+      zIndex: g.isFavorite ? 45 : (idx % 35) + 5,
+      marginOffset: isCollageMode
+        ? (idx % 2 === 0 ? "-mt-4 sm:-mt-8 -ml-3 sm:-ml-6" : "-mt-2 sm:-mt-5 -mr-3 sm:-mr-6")
+        : (idx % 2 === 0 ? "-mt-6 sm:-mt-10 -ml-4 sm:-ml-8" : "mt-4 sm:mt-8 -mr-6 sm:-mr-12"),
+      isFavorite: g.isFavorite,
+    };
+  });
 
   const handleButtonClick = () => {
     if (isTransitioning) return;

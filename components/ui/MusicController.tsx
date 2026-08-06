@@ -6,6 +6,7 @@ import { useAudio } from "@/context/AudioContext";
 
 export function MusicController() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const {
     isPlaying,
     isMuted,
@@ -17,6 +18,34 @@ export function MusicController() {
     setVolume,
     playSound,
   } = useAudio();
+
+  // Auto Fullscreen on first click anywhere on document
+  React.useEffect(() => {
+    const handleFirstClick = () => {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {
+          // Browser prevented full screen or user dismissed
+        });
+      }
+      window.removeEventListener("click", handleFirstClick);
+    };
+    window.addEventListener("click", handleFirstClick);
+    return () => window.removeEventListener("click", handleFirstClick);
+  }, []);
+
+  const toggleFullscreenMode = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch(() => {});
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(() => {
+          setIsFullscreen(false);
+        }).catch(() => {});
+      }
+    }
+  };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(parseFloat(e.target.value));
@@ -33,7 +62,15 @@ export function MusicController() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 select-none">
+    <div className="fixed bottom-6 right-6 z-50 select-none flex items-center gap-2">
+      {/* Fullscreen Toggle Button */}
+      <button
+        onClick={toggleFullscreenMode}
+        className="p-3 rounded-full bg-white/85 backdrop-blur-md border border-white/70 shadow-md text-zinc-700 hover:text-rose-500 transition-all hover:scale-105 active:scale-95 text-xs font-semibold"
+        title="Toggle Fullscreen Mode ⛶"
+      >
+        ⛶
+      </button>
       <AnimatePresence>
         {isExpanded ? (
           /* EXPANDED LUXURY GLASSMORPHISM PLAYER */

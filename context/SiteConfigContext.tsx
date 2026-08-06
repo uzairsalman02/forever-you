@@ -95,6 +95,7 @@ export interface WebsiteEffectsSettings {
   glassEffects: boolean;
   animations: boolean;
   pageTransitions: boolean;
+  galleryStyle: "polaroid-collage" | "scatter";
 }
 
 export interface ThemeSettings {
@@ -273,6 +274,7 @@ export const DEFAULT_SITE_CONFIG: FullSiteConfig = {
     glassEffects: true,
     animations: true,
     pageTransitions: true,
+    galleryStyle: "polaroid-collage",
   },
   theme: {
     primaryColor: "#F472B6",

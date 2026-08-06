@@ -73,30 +73,30 @@ export function PolaroidCard({
       whileHover={
         !isTransitioning
           ? {
-              y: -10,
-              scale: 1.05,
-              rotate: memory.hoverRotation,
-              zIndex: 60,
-              transition: { duration: 0.3, ease: "easeOut" },
+              y: -14,
+              scale: 1.12,
+              rotate: 0,
+              zIndex: 90,
+              transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
             }
           : undefined
       }
       style={{ zIndex: isFav ? 45 : memory.zIndex }}
-      className={`relative group bg-white p-2.5 sm:p-3.5 pb-3 sm:pb-4 rounded-md sm:rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.11)] border border-rose-100/50 transition-shadow duration-300 hover:shadow-[0_25px_50px_rgba(244,114,182,0.25)] select-none will-change-transform ${memory.widthClass} ${memory.marginOffset} ${
-        isFav ? "ring-2 ring-rose-200/60" : ""
+      className={`relative group bg-white p-2.5 sm:p-3.5 pb-8 sm:pb-12 rounded-sm shadow-[0_12px_35px_rgba(0,0,0,0.20)] border border-slate-200/80 transition-shadow duration-300 hover:shadow-[0_30px_60px_rgba(0,0,0,0.35)] select-none will-change-transform ${memory.widthClass} ${memory.marginOffset} ${
+        isFav ? "ring-2 ring-rose-400" : ""
       }`}
     >
-      {/* Clean Printed Polaroid Frame Image (No Captions / No Text) */}
+      {/* Photo Frame Container */}
       <div
-        className={`relative w-full ${memory.aspectRatio} overflow-hidden rounded-sm bg-zinc-100`}
+        className={`relative w-full ${memory.aspectRatio} overflow-hidden bg-slate-900/10 border border-slate-200/60`}
       >
         <Image
           src={memory.imageUrl}
           alt={`Memory ${memory.id}`}
           fill
-          sizes="(max-width: 640px) 35vw, (max-width: 1024px) 25vw, 280px"
+          sizes="(max-width: 640px) 40vw, (max-width: 1024px) 28vw, 320px"
           loading="lazy"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-108"
         />
       </div>
     </motion.div>
