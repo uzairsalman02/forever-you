@@ -50,6 +50,28 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
     }, 700);
   };
 
+  const formatHeroDate = (dateStr: string) => {
+    if (!dateStr) return "21 August";
+    const parts = dateStr.split("-");
+    if (parts.length === 3) {
+      const monthIdx = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      if (!isNaN(day) && monthIdx >= 0 && monthIdx < 12) {
+        return `${day} ${months[monthIdx]}`;
+      }
+    }
+    return dateStr;
+  };
+
+  const heartImageUrl =
+    hero.heroHeartImage ||
+    config.gallery[0]?.imageUrl ||
+    "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80";
+
   return (
     <section
       id="hero-section"
@@ -95,28 +117,59 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 flex flex-col items-center max-w-3xl mx-auto px-4 py-16"
+        className="relative z-10 flex flex-col items-center max-w-3xl mx-auto px-4 py-12"
       >
-        {/* Tagline */}
+        {/* Tagline Date (Formatted as 21 August) */}
         <motion.span
           variants={itemVariants}
-          className="font-sans text-xs sm:text-sm tracking-[0.4em] uppercase text-zinc-500 mb-8 font-medium"
+          className="font-sans text-xs sm:text-sm tracking-[0.4em] uppercase text-rose-800/80 mb-6 font-semibold"
         >
-          {config.countdown.targetDate}
+          {formatHeroDate(config.countdown.targetDate)}
         </motion.span>
 
         {/* Calligraphy Handwritten Title */}
         <motion.h1
           variants={itemVariants}
-          className="font-calligraphy text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-zinc-900 tracking-normal leading-[1.05] mb-8 text-rose-950/90 drop-shadow-sm"
+          className="font-calligraphy text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-zinc-900 tracking-normal leading-[1.05] mb-4 text-rose-950/90 drop-shadow-sm"
         >
           {general.heroTitle || hero.mainHeading} <span className="text-rose-500 inline-block font-sans text-4xl sm:text-5xl md:text-6xl align-middle ml-1">❤️</span>
         </motion.h1>
 
+        {/* Heart-Shaped Photo Frame below Happy Birthday ❤️ */}
+        <motion.div
+          variants={itemVariants}
+          whileHover={{ scale: 1.05, rotate: 2 }}
+          transition={{ duration: 0.4 }}
+          className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 my-6 flex items-center justify-center filter drop-shadow-[0_15px_35px_rgba(244,114,182,0.35)] cursor-pointer group"
+        >
+          {/* Heart SVG Mask Container */}
+          <div
+            className="w-full h-full p-1.5 bg-gradient-to-tr from-rose-400 via-pink-300 to-rose-400 rounded-full transition-all duration-500 group-hover:from-rose-500 group-hover:to-pink-500"
+            style={{
+              clipPath:
+                "path('M 100 180 C 100 180, 15 120, 15 65 C 15 30, 42 5, 75 5 C 90 5, 100 15, 100 22 C 100 15, 110 5, 125 5 C 158 5, 185 30, 185 65 C 185 120, 100 180, 100 180 Z')",
+            }}
+          >
+            <div
+              className="w-full h-full overflow-hidden bg-rose-100 relative"
+              style={{
+                clipPath:
+                  "path('M 100 180 C 100 180, 15 120, 15 65 C 15 30, 42 5, 75 5 C 90 5, 100 15, 100 22 C 100 15, 110 5, 125 5 C 158 5, 185 30, 185 65 C 185 120, 100 180, 100 180 Z')",
+              }}
+            >
+              <img
+                src={heartImageUrl}
+                alt="Love Memory"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+            </div>
+          </div>
+        </motion.div>
+
         {/* Subtitle */}
         <motion.h2
           variants={itemVariants}
-          className="font-serif text-xl sm:text-2xl md:text-3xl font-normal italic text-zinc-700 tracking-wide mb-10 max-w-xl"
+          className="font-serif text-xl sm:text-2xl md:text-3xl font-normal italic text-zinc-700 tracking-wide mb-8 max-w-xl"
         >
           {general.heroSubtitle || hero.subtitle}
         </motion.h2>

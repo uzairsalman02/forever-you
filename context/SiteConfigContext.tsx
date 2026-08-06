@@ -115,6 +115,7 @@ export interface HeroSettings {
   buttonText: string;
   backgroundStyle: string;
   heroHeight: string;
+  heroHeartImage: string;
 }
 
 export interface FinalMessageSettings {
@@ -292,6 +293,7 @@ export const DEFAULT_SITE_CONFIG: FullSiteConfig = {
     buttonText: "Open My Gift ❤️",
     backgroundStyle: "ambient",
     heroHeight: "min-h-screen",
+    heroHeartImage: VAULT_MEMORIES[0]?.imageUrl || "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80",
   },
   finalMessage: {
     title: "Make a Wish & Cut the Cake!",
