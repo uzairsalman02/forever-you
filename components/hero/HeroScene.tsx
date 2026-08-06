@@ -140,22 +140,26 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
           variants={itemVariants}
           whileHover={{ scale: 1.05, rotate: 2 }}
           transition={{ duration: 0.4 }}
-          className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 my-6 flex items-center justify-center filter drop-shadow-[0_15px_35px_rgba(244,114,182,0.35)] cursor-pointer group"
+          className="relative w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 my-6 flex items-center justify-center filter drop-shadow-[0_15px_35px_rgba(244,114,182,0.4)] cursor-pointer group"
         >
-          {/* Heart SVG Mask Container */}
+          {/* SVG ObjectBoundingBox Mask Definition for 100% Responsive Scale */}
+          <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+            <defs>
+              <clipPath id="hero-heart-mask" clipPathUnits="objectBoundingBox">
+                <path d="M 0.5,0.92 C 0.5,0.92 0.04,0.6 0.04,0.32 C 0.04,0.14 0.17,0.04 0.33,0.04 C 0.43,0.04 0.5,0.1 0.5,0.17 C 0.5,0.1 0.57,0.04 0.67,0.04 C 0.83,0.04 0.96,0.14 0.96,0.32 C 0.96,0.6 0.5,0.92 0.5,0.92 Z" />
+              </clipPath>
+            </defs>
+          </svg>
+
+          {/* Outer Glowing Gradient Frame */}
           <div
-            className="w-full h-full p-1.5 bg-gradient-to-tr from-rose-400 via-pink-300 to-rose-400 rounded-full transition-all duration-500 group-hover:from-rose-500 group-hover:to-pink-500"
-            style={{
-              clipPath:
-                "path('M 100 180 C 100 180, 15 120, 15 65 C 15 30, 42 5, 75 5 C 90 5, 100 15, 100 22 C 100 15, 110 5, 125 5 C 158 5, 185 30, 185 65 C 185 120, 100 180, 100 180 Z')",
-            }}
+            className="w-full h-full p-1.5 bg-gradient-to-tr from-rose-400 via-pink-300 to-rose-500 rounded-full transition-all duration-500 group-hover:from-rose-500 group-hover:to-pink-500 flex items-center justify-center"
+            style={{ clipPath: "url(#hero-heart-mask)" }}
           >
+            {/* Inner Photo Container */}
             <div
-              className="w-full h-full overflow-hidden bg-rose-100 relative"
-              style={{
-                clipPath:
-                  "path('M 100 180 C 100 180, 15 120, 15 65 C 15 30, 42 5, 75 5 C 90 5, 100 15, 100 22 C 100 15, 110 5, 125 5 C 158 5, 185 30, 185 65 C 185 120, 100 180, 100 180 Z')",
-              }}
+              className="w-full h-full bg-rose-100 relative overflow-hidden flex items-center justify-center"
+              style={{ clipPath: "url(#hero-heart-mask)" }}
             >
               <img
                 src={heartImageUrl}
