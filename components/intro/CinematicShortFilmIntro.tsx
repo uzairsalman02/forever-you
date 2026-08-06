@@ -218,23 +218,25 @@ export function CinematicShortFilmIntro({ onComplete }: CinematicShortFilmIntroP
             Skip &gt;&gt;
           </motion.button>
 
-          {/* Single Sentence Subtitle Presentation Container */}
-          <div className="relative z-10 max-w-3xl mx-auto px-6 min-h-[160px] flex items-center justify-center">
+          {/* Single Sentence / Multiline Subtitle Presentation Container */}
+          <div className="relative z-10 max-w-4xl mx-auto px-6 min-h-[220px] flex items-center justify-center">
             <AnimatePresence mode="wait">
               {!isPausedBetween && currentLine && (
-                <motion.h2
+                <motion.div
                   key={currentLine.id || currentIndex}
-                  initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                  initial={{ opacity: 0, y: 18, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -12, scale: 0.98 }}
+                  exit={{ opacity: 0, y: -15, scale: 0.97 }}
                   transition={{
-                    duration: 0.9,
+                    duration: 0.85,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className="font-serif text-2xl sm:text-4xl md:text-5xl font-light text-slate-100 tracking-wide leading-relaxed drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] whitespace-pre-line text-center"
+                  className="flex flex-col items-center justify-center text-center space-y-4"
                 >
-                  {currentLine.text}
-                </motion.h2>
+                  <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-light tracking-wide leading-[1.6] text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-rose-100 drop-shadow-[0_0_25px_rgba(255,255,255,0.45)] whitespace-pre-line text-center px-4">
+                    {currentLine.text}
+                  </h2>
+                </motion.div>
               )}
             </AnimatePresence>
           </div>

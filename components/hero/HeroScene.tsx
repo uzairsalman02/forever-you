@@ -44,6 +44,9 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
       if (onOpenGift) {
         onOpenGift();
       }
+      setTimeout(() => {
+        setIsDissolving(false);
+      }, 1000);
     }, 700);
   };
 

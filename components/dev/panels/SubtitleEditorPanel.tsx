@@ -115,12 +115,12 @@ export function SubtitleEditorPanel() {
             </span>
 
             <div className="flex-1 w-full space-y-1">
-              <input
-                type="text"
+              <textarea
+                rows={2}
                 value={sub.text}
                 onChange={(e) => handleUpdateLine(sub.id, "text", e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/40"
-                placeholder="Sentence text..."
+                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/40 leading-relaxed"
+                placeholder="Sentence or multiline poetry couplet text..."
               />
             </div>
 

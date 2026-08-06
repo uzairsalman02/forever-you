@@ -44,11 +44,14 @@ export default function HomePage() {
   const handleShortFilmComplete = () => {
     setIsPlayingCinematicShortFilm(false);
     setTimeout(() => {
-      const memoryVault = document.getElementById("memory-vault");
+      const memoryVault =
+        document.getElementById("memory-vault") ||
+        document.getElementById("memories-section") ||
+        document.getElementById("hero-section");
       if (memoryVault) {
         memoryVault.scrollIntoView({ behavior: "smooth" });
       }
-    }, 100);
+    }, 150);
   };
 
 
