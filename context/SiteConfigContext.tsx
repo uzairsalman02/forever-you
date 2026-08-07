@@ -323,9 +323,13 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   const [config, setConfig] = useState<FullSiteConfig>(DEFAULT_SITE_CONFIG);
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
-  // Load from localStorage on mount
+  // Free Universal Cloud KV Endpoint
+  const CLOUD_KV_URL = "https://kvdb.io/9TqN1bL2xK4yV8zM/forever_you_config";
+
+  // Load configuration from localStorage and Free Cloud Endpoint on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
+      // Step 1: Instant load from localStorage
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -335,8 +339,38 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       } catch (err) {
         console.error("Failed to load CMS config from localStorage:", err);
       }
+
+      // Step 2: Fetch latest cloud config so all devices (Mobile, Laptop, Vercel, GitHub Pages) sync automatically
+      const syncFromCloud = async () => {
+        try {
+          const resKv = await fetch(CLOUD_KV_URL).catch(() => null);
+          if (resKv && resKv.ok) {
+            const cloudConfig = await resKv.json();
+            if (cloudConfig && typeof cloudConfig === "object" && cloudConfig.general) {
+              setConfig((prev) => ({ ...prev, ...cloudConfig }));
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudConfig));
+            }
+          }
+        } catch (err) {
+          console.log("Cloud sync note: using local cache");
+        }
+      };
+
+      syncFromCloud();
     }
   }, []);
+
+  const pushToCloud = (data: FullSiteConfig) => {
+    if (typeof window === "undefined") return;
+    const jsonStr = JSON.stringify(data);
+
+    // Save to Free Universal Cloud KV Store
+    fetch(CLOUD_KV_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonStr,
+    }).catch(() => {});
+  };
 
   const updateSection = <K extends keyof FullSiteConfig>(
     section: K,
@@ -350,9 +384,10 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         ...prev,
         [section]: nextSectionData,
       };
-      // Auto-save to localStorage
+      // Auto-save to localStorage & push to Cloud
       if (typeof window !== "undefined") {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        pushToCloud(updated);
       }
       return updated;
     });
@@ -362,6 +397,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   const saveConfig = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+      pushToCloud(config);
     }
     setIsSaved(true);
   };
