@@ -319,6 +319,8 @@ const SiteConfigContext = createContext<SiteConfigContextType | undefined>(
   undefined
 );
 
+import { fetchSiteConfigFromSupabase, saveSiteConfigToSupabase } from "@/lib/supabase";
+
 export function SiteConfigProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<FullSiteConfig>(DEFAULT_SITE_CONFIG);
   const [isSaved, setIsSaved] = useState<boolean>(true);
@@ -326,7 +328,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   // Free Universal Cloud KV Endpoint
   const CLOUD_KV_URL = "https://kvdb.io/9TqN1bL2xK4yV8zM/forever_you_config";
 
-  // Load configuration from localStorage and Free Cloud Endpoint on mount
+  // Load configuration from localStorage, Supabase, and Free Cloud Endpoint on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Step 1: Instant load from localStorage
@@ -343,6 +345,17 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       // Step 2: Fetch latest cloud config so all devices (Mobile, Laptop, Vercel, GitHub Pages) sync automatically
       const syncFromCloud = async () => {
         try {
+          // Check Supabase first
+          const customUrl = localStorage.getItem("forever_you_supabase_url") || undefined;
+          const customKey = localStorage.getItem("forever_you_supabase_key") || undefined;
+          const sbData = await fetchSiteConfigFromSupabase(customUrl, customKey);
+          if (sbData && typeof sbData === "object" && sbData.general) {
+            setConfig((prev) => ({ ...prev, ...sbData }));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(sbData));
+            return;
+          }
+
+          // Fallback to Cloud KV Store
           const resKv = await fetch(CLOUD_KV_URL).catch(() => null);
           if (resKv && resKv.ok) {
             const cloudConfig = await resKv.json();
@@ -363,6 +376,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   const pushToCloud = (data: FullSiteConfig) => {
     if (typeof window === "undefined") return;
     const jsonStr = JSON.stringify(data);
+
+    // Save to Supabase Database
+    const customUrl = localStorage.getItem("forever_you_supabase_url") || undefined;
+    const customKey = localStorage.getItem("forever_you_supabase_key") || undefined;
+    saveSiteConfigToSupabase(data, customUrl, customKey);
 
     // Save to Free Universal Cloud KV Store
     fetch(CLOUD_KV_URL, {

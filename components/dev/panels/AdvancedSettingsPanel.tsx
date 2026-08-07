@@ -37,14 +37,31 @@ export function AdvancedSettingsPanel() {
     }
   };
 
+  const [sbUrl, setSbUrl] = React.useState<string>(
+    typeof window !== "undefined" ? localStorage.getItem("forever_you_supabase_url") || "" : ""
+  );
+  const [sbKey, setSbKey] = React.useState<string>(
+    typeof window !== "undefined" ? localStorage.getItem("forever_you_supabase_key") || "" : ""
+  );
+  const [sbStatus, setSbStatus] = React.useState<string>("");
+
+  const handleSaveSupabase = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("forever_you_supabase_url", sbUrl.trim());
+      localStorage.setItem("forever_you_supabase_key", sbKey.trim());
+      setSbStatus("✅ Supabase credentials saved! Auto-sync is active.");
+      setTimeout(() => setSbStatus(""), 4000);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-          Advanced Settings & Project Backup 🚀
+          Advanced Settings & Supabase Cloud Sync 🚀
         </h2>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Export full CMS configuration, restore backups, or reset settings to factory defaults.
+          Export full CMS configuration, connect free Supabase cloud database, or reset settings to factory defaults.
         </p>
       </div>
 
@@ -55,6 +72,60 @@ export function AdvancedSettingsPanel() {
         onChange={handleFileImport}
         className="hidden"
       />
+
+      {/* Supabase Free Cloud Storage & Database Section */}
+      <div className="p-6 rounded-2xl bg-gradient-to-tr from-emerald-500/10 via-teal-500/5 to-cyan-500/10 backdrop-blur-xl border border-emerald-500/20 shadow-sm space-y-4">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">⚡</span>
+          <div>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+              Supabase Free Database & Image Cloud Storage (100% Free Forever)
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Connect your free Supabase project to automatically sync all photos, love letter, and text edits between your phone and laptop!
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Supabase Project URL
+            </label>
+            <input
+              type="text"
+              value={sbUrl}
+              onChange={(e) => setSbUrl(e.target.value)}
+              placeholder="https://your-project.supabase.co"
+              className="w-full px-4 py-2.5 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-800 dark:text-slate-100"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Supabase Anon Key
+            </label>
+            <input
+              type="password"
+              value={sbKey}
+              onChange={(e) => setSbKey(e.target.value)}
+              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              className="w-full px-4 py-2.5 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-800 dark:text-slate-100"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between pt-2">
+          <button
+            onClick={handleSaveSupabase}
+            className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-md transition-all"
+          >
+            Connect & Save Supabase Credentials ⚡
+          </button>
+
+          {sbStatus && <span className="text-xs font-bold text-emerald-600 animate-pulse">{sbStatus}</span>}
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Export Backup Card */}

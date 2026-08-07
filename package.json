@@ -10,6 +10,7 @@
     "deploy": "next build && npx gh-pages -d out -b gh-pages"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.7",
     "next": "^15.1.7",
