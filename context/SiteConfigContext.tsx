@@ -319,7 +319,7 @@ const SiteConfigContext = createContext<SiteConfigContextType | undefined>(
   undefined
 );
 
-import { fetchSiteConfigFromSupabase, saveSiteConfigToSupabase } from "@/lib/supabase";
+import { fetchSiteConfigFromSupabase, saveSiteConfigToSupabase, subscribeToConfigChanges } from "@/lib/supabase";
 
 export function SiteConfigProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<FullSiteConfig>(DEFAULT_SITE_CONFIG);
@@ -370,6 +370,21 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       };
 
       syncFromCloud();
+
+      // Step 3: Subscribe to Realtime Supabase Changes across all open browsers & devices
+      const customUrl = localStorage.getItem("forever_you_supabase_url") || undefined;
+      const customKey = localStorage.getItem("forever_you_supabase_key") || undefined;
+      const unsubscribe = subscribeToConfigChanges((newConfig) => {
+        if (newConfig && typeof newConfig === "object" && newConfig.general) {
+          setConfig((prev) => ({ ...prev, ...newConfig }));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(newConfig));
+          setIsSaved(true);
+        }
+      }, customUrl, customKey);
+
+      return () => {
+        unsubscribe();
+      };
     }
   }, []);
 

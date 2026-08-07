@@ -1,26 +1,75 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-// Default Supabase project credentials for Forever You app
-const DEFAULT_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://xyzcompanyfg.supabase.co";
-const DEFAULT_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+// Retrieve default env credentials or fallback to browser local storage
+export function getSupabaseCredentials() {
+  if (typeof window !== "undefined") {
+    const customUrl = localStorage.getItem("forever_you_supabase_url");
+    const customKey = localStorage.getItem("forever_you_supabase_key");
+    if (customUrl && customKey) {
+      return { url: customUrl.trim(), key: customKey.trim() };
+    }
+  }
 
-export const getSupabaseClient = (customUrl?: string, customKey?: string) => {
-  const url = customUrl || DEFAULT_SUPABASE_URL;
-  const key = customKey || DEFAULT_SUPABASE_ANON_KEY;
-  if (!url || !key || url.includes("xyzcompanyfg")) return null;
+  const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const envKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (envUrl && envKey && !envUrl.includes("xyzcompanyfg")) {
+    return { url: envUrl.trim(), key: envKey.trim() };
+  }
+
+  return null;
+}
+
+export function getSupabaseClient(customUrl?: string, customKey?: string): SupabaseClient | null {
+  const creds = (customUrl && customKey)
+    ? { url: customUrl.trim(), key: customKey.trim() }
+    : getSupabaseCredentials();
+
+  if (!creds || !creds.url || !creds.key) return null;
+
   try {
-    return createClient(url, key);
+    return createClient(creds.url, creds.key, {
+      auth: { persistSession: false },
+    });
   } catch (err) {
     console.error("Supabase client init error:", err);
     return null;
   }
-};
+}
+
+/**
+ * Test Connection to Supabase database table 'site_config'
+ */
+export async function testSupabaseConnection(customUrl?: string, customKey?: string): Promise<{ success: boolean; message: string }> {
+  const client = getSupabaseClient(customUrl, customKey);
+  if (!client) {
+    return { success: false, message: "Supabase URL or Anon Key is missing." };
+  }
+
+  try {
+    const { data, error } = await client
+      .from("site_config")
+      .select("id")
+      .limit(1);
+
+    if (error) {
+      if (error.code === "42P01") {
+        return { success: false, message: "Table 'site_config' does not exist yet. Please run the SQL script." };
+      }
+      return { success: false, message: `Database error: ${error.message}` };
+    }
+
+    return { success: true, message: "✅ Successfully connected to Supabase Database!" };
+  } catch (err: any) {
+    return { success: false, message: `Connection failed: ${err?.message || "Unknown error"}` };
+  }
+}
 
 /**
  * Fetch latest CMS configuration from Supabase table 'site_config'
  */
-export async function fetchSiteConfigFromSupabase(supabaseUrl?: string, supabaseKey?: string) {
-  const client = getSupabaseClient(supabaseUrl, supabaseKey);
+export async function fetchSiteConfigFromSupabase(customUrl?: string, customKey?: string) {
+  const client = getSupabaseClient(customUrl, customKey);
   if (!client) return null;
 
   try {
@@ -47,8 +96,8 @@ export async function fetchSiteConfigFromSupabase(supabaseUrl?: string, supabase
 /**
  * Save CMS configuration to Supabase table 'site_config'
  */
-export async function saveSiteConfigToSupabase(config: any, supabaseUrl?: string, supabaseKey?: string) {
-  const client = getSupabaseClient(supabaseUrl, supabaseKey);
+export async function saveSiteConfigToSupabase(config: any, customUrl?: string, customKey?: string): Promise<boolean> {
+  const client = getSupabaseClient(customUrl, customKey);
   if (!client) return false;
 
   try {
@@ -77,18 +126,18 @@ export async function saveSiteConfigToSupabase(config: any, supabaseUrl?: string
 /**
  * Upload image file to Supabase Storage Bucket 'memories'
  */
-export async function uploadImageToSupabase(file: File, supabaseUrl?: string, supabaseKey?: string): Promise<string | null> {
-  const client = getSupabaseClient(supabaseUrl, supabaseKey);
+export async function uploadImageToSupabase(file: File, customUrl?: string, customKey?: string): Promise<string | null> {
+  const client = getSupabaseClient(customUrl, customKey);
   if (!client) return null;
 
   try {
-    const fileExt = file.name.split(".").pop();
+    const fileExt = file.name.split(".").pop() || "jpg";
     const fileName = `memory_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
     const filePath = `uploads/${fileName}`;
 
     const { error: uploadError } = await client.storage
       .from("memories")
-      .upload(filePath, file, { upsert: true });
+      .upload(filePath, file, { upsert: true, cacheControl: "3600" });
 
     if (uploadError) {
       console.error("Supabase image upload error:", uploadError.message);
@@ -100,5 +149,54 @@ export async function uploadImageToSupabase(file: File, supabaseUrl?: string, su
   } catch (err) {
     console.error("Failed to upload image to Supabase:", err);
     return null;
+  }
+}
+
+/**
+ * Real-time Supabase subscription for config changes
+ */
+export function subscribeToConfigChanges(onConfigUpdated: (newConfig: any) => void, customUrl?: string, customKey?: string) {
+  const client = getSupabaseClient(customUrl, customKey);
+  if (!client) return () => {};
+
+  try {
+    const channel = client
+      .channel("site_config_realtime_changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "site_config",
+          filter: "id=eq.main_config",
+        },
+        (payload) => {
+          if (payload.new && payload.new.config_data) {
+            onConfigUpdated(payload.new.config_data);
+          }
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "site_config",
+          filter: "id=eq.main_config",
+        },
+        (payload) => {
+          if (payload.new && payload.new.config_data) {
+            onConfigUpdated(payload.new.config_data);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      client.removeChannel(channel);
+    };
+  } catch (err) {
+    console.error("Failed to subscribe to Supabase realtime channel:", err);
+    return () => {};
   }
 }
