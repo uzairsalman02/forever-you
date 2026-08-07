@@ -1,12 +1,43 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
+/**
+ * Auto-correct and sanitize user-pasted Supabase URLs
+ */
+export function sanitizeSupabaseUrl(url: string): string {
+  if (!url) return "";
+  let cleaned = url.trim();
+
+  // If user pasted dashboard URL like https://supabase.com/dashboard/project/abcdefgh
+  const dashMatch = cleaned.match(/supabase\.com\/dashboard\/project\/([a-zA-Z0-9_-]+)/);
+  if (dashMatch && dashMatch[1]) {
+    return `https://${dashMatch[1]}.supabase.co`;
+  }
+
+  // Remove trailing paths like /rest/v1, /storage/v1, /auth/v1
+  cleaned = cleaned.replace(/\/rest\/v1\/?.*$/i, "");
+  cleaned = cleaned.replace(/\/storage\/v1\/?.*$/i, "");
+  cleaned = cleaned.replace(/\/auth\/v1\/?.*$/i, "");
+  cleaned = cleaned.replace(/\/+$/, "");
+
+  if (!cleaned.startsWith("http://") && !cleaned.startsWith("https://")) {
+    cleaned = `https://${cleaned}`;
+  }
+
+  return cleaned;
+}
+
+export function sanitizeSupabaseKey(key: string): string {
+  if (!key) return "";
+  return key.trim().replace(/^["']|["']$/g, "");
+}
+
 // Retrieve default env credentials or fallback to browser local storage
 export function getSupabaseCredentials() {
   if (typeof window !== "undefined") {
     const customUrl = localStorage.getItem("forever_you_supabase_url");
     const customKey = localStorage.getItem("forever_you_supabase_key");
     if (customUrl && customKey) {
-      return { url: customUrl.trim(), key: customKey.trim() };
+      return { url: sanitizeSupabaseUrl(customUrl), key: sanitizeSupabaseKey(customKey) };
     }
   }
 
@@ -14,7 +45,7 @@ export function getSupabaseCredentials() {
   const envKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (envUrl && envKey && !envUrl.includes("xyzcompanyfg")) {
-    return { url: envUrl.trim(), key: envKey.trim() };
+    return { url: sanitizeSupabaseUrl(envUrl), key: sanitizeSupabaseKey(envKey) };
   }
 
   return null;
@@ -22,7 +53,7 @@ export function getSupabaseCredentials() {
 
 export function getSupabaseClient(customUrl?: string, customKey?: string): SupabaseClient | null {
   const creds = (customUrl && customKey)
-    ? { url: customUrl.trim(), key: customKey.trim() }
+    ? { url: sanitizeSupabaseUrl(customUrl), key: sanitizeSupabaseKey(customKey) }
     : getSupabaseCredentials();
 
   if (!creds || !creds.url || !creds.key) return null;
