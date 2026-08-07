@@ -65,7 +65,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.site_config;`;
 
   const handleSaveSupabase = async () => {
     if (typeof window !== "undefined") {
-      const { sanitizeSupabaseUrl, sanitizeSupabaseKey, testSupabaseConnection, saveSiteConfigToSupabase } = await import("@/lib/supabase");
+      const { sanitizeSupabaseUrl, sanitizeSupabaseKey, setGlobalSupabaseCredentials, testSupabaseConnection, saveSiteConfigToSupabase } = await import("@/lib/supabase");
       const cleanUrl = sanitizeSupabaseUrl(sbUrl);
       const cleanKey = sanitizeSupabaseKey(sbKey);
 
@@ -73,13 +73,14 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.site_config;`;
       setSbKey(cleanKey);
       localStorage.setItem("forever_you_supabase_url", cleanUrl);
       localStorage.setItem("forever_you_supabase_key", cleanKey);
+      setGlobalSupabaseCredentials(cleanUrl, cleanKey);
       setIsTesting(true);
 
       const result = await testSupabaseConnection(cleanUrl, cleanKey);
       setIsTesting(false);
 
       if (result.success) {
-        setSbStatus("✅ Supabase Connected & Active! Syncing current settings...");
+        setSbStatus("✅ Supabase Connected & Globally Active across all devices!");
         await saveSiteConfigToSupabase(config, cleanUrl, cleanKey);
         setTimeout(() => setSbStatus(""), 5000);
       } else {

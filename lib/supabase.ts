@@ -31,7 +31,16 @@ export function sanitizeSupabaseKey(key: string): string {
   return key.trim().replace(/^["']|["']$/g, "");
 }
 
-// Retrieve default env credentials or fallback to browser local storage
+// Active Global Fallback Store
+let activeGlobalUrl = "";
+let activeGlobalKey = "";
+
+export function setGlobalSupabaseCredentials(url: string, key: string) {
+  activeGlobalUrl = sanitizeSupabaseUrl(url);
+  activeGlobalKey = sanitizeSupabaseKey(key);
+}
+
+// Retrieve default env credentials or fallback to browser local storage or active global store
 export function getSupabaseCredentials() {
   if (typeof window !== "undefined") {
     const customUrl = localStorage.getItem("forever_you_supabase_url");
@@ -39,6 +48,10 @@ export function getSupabaseCredentials() {
     if (customUrl && customKey) {
       return { url: sanitizeSupabaseUrl(customUrl), key: sanitizeSupabaseKey(customKey) };
     }
+  }
+
+  if (activeGlobalUrl && activeGlobalKey) {
+    return { url: activeGlobalUrl, key: activeGlobalKey };
   }
 
   const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
