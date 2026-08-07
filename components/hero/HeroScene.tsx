@@ -135,39 +135,53 @@ export function HeroScene({ onOpenGift }: HeroSceneProps) {
           {general.heroTitle || hero.mainHeading} <span className="text-rose-500 inline-block font-sans text-4xl sm:text-5xl md:text-6xl align-middle ml-1">❤️</span>
         </motion.h1>
 
-        {/* Heart-Shaped Photo Frame below Happy Birthday ❤️ */}
+        {/* Pure Vector-Perfect Heart-Shaped Photo Frame below Happy Birthday ❤️ */}
         <motion.div
           variants={itemVariants}
-          whileHover={{ scale: 1.05, rotate: 2 }}
+          whileHover={{ scale: 1.06, rotate: 2 }}
           transition={{ duration: 0.4 }}
-          className="relative w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 my-6 flex items-center justify-center filter drop-shadow-[0_15px_35px_rgba(244,114,182,0.4)] cursor-pointer group"
+          className="relative w-44 h-40 sm:w-56 sm:h-50 md:w-64 md:h-56 my-6 flex items-center justify-center filter drop-shadow-[0_12px_35px_rgba(244,114,182,0.4)] cursor-pointer group"
         >
-          {/* SVG ObjectBoundingBox Mask Definition for 100% Responsive Scale */}
-          <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
-            <defs>
-              <clipPath id="hero-heart-mask" clipPathUnits="objectBoundingBox">
-                <path d="M 0.5,0.92 C 0.5,0.92 0.04,0.6 0.04,0.32 C 0.04,0.14 0.17,0.04 0.33,0.04 C 0.43,0.04 0.5,0.1 0.5,0.17 C 0.5,0.1 0.57,0.04 0.67,0.04 C 0.83,0.04 0.96,0.14 0.96,0.32 C 0.96,0.6 0.5,0.92 0.5,0.92 Z" />
-              </clipPath>
-            </defs>
-          </svg>
-
-          {/* Outer Glowing Gradient Frame */}
-          <div
-            className="w-full h-full p-1.5 bg-gradient-to-tr from-rose-400 via-pink-300 to-rose-500 rounded-full transition-all duration-500 group-hover:from-rose-500 group-hover:to-pink-500 flex items-center justify-center"
-            style={{ clipPath: "url(#hero-heart-mask)" }}
+          <svg
+            viewBox="0 0 100 90"
+            className="w-full h-full overflow-visible transition-transform duration-700 group-hover:scale-105"
           >
-            {/* Inner Photo Container */}
-            <div
-              className="w-full h-full bg-rose-100 relative overflow-hidden flex items-center justify-center"
-              style={{ clipPath: "url(#hero-heart-mask)" }}
-            >
-              <img
-                src={heartImageUrl}
-                alt="Love Memory"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-            </div>
-          </div>
+            <defs>
+              {/* Perfectly Smooth Heart Clip Path */}
+              <clipPath id="hero-heart-vector-clip">
+                <path d="M 50,85 C 50,85 10,55 10,28 C 10,14 21,4 35,4 C 43,4 50,9 50,9 C 50,9 57,4 65,4 C 79,4 90,14 90,28 C 90,55 50,85 50,85 Z" />
+              </clipPath>
+
+              {/* Romantic Rose Gold Gradient for Outer Border */}
+              <linearGradient id="hero-heart-border-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#F472B6" />
+                <stop offset="50%" stopColor="#F43F5E" />
+                <stop offset="100%" stopColor="#FB7185" />
+              </linearGradient>
+            </defs>
+
+            {/* Clipped Photo inside Heart */}
+            <image
+              href={heartImageUrl}
+              x="0"
+              y="0"
+              width="100"
+              height="90"
+              preserveAspectRatio="xMidYMid slice"
+              clipPath="url(#hero-heart-vector-clip)"
+              className="transition-transform duration-700 group-hover:scale-110 origin-center"
+            />
+
+            {/* Uniform Crisp Outer Heart Border */}
+            <path
+              d="M 50,85 C 50,85 10,55 10,28 C 10,14 21,4 35,4 C 43,4 50,9 50,9 C 50,9 57,4 65,4 C 79,4 90,14 90,28 C 90,55 50,85 50,85 Z"
+              fill="none"
+              stroke="url(#hero-heart-border-gradient)"
+              strokeWidth="3.5"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          </svg>
         </motion.div>
 
         {/* Subtitle */}
